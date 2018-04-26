@@ -144,33 +144,36 @@ Object subclass: #OOStack
 	poolDictionaries: ''
 	category: 'Stack-Exercise'!
 
-!OOStack methodsFor: 'as yet unclassified' stamp: 'GAA 4/24/2018 11:53:23'!
-isEmpty
-	^pila size = 0! !
-
-!OOStack methodsFor: 'as yet unclassified' stamp: 'GAA 4/24/2018 11:54:43'!
+!OOStack methodsFor: 'private' stamp: 'GAA 4/26/2018 00:22:08'!
 newStack
-	pila _ OrderedCollection new.! !
+	pila _ OrderedCollection new.
+	pila add: [self error: self errorStackVacio.].! !
 
-!OOStack methodsFor: 'as yet unclassified' stamp: 'GAA 4/24/2018 12:12:28'!
+
+!OOStack methodsFor: 'errores' stamp: 'GAA 4/25/2018 23:41:25'!
+errorStackVacio
+	^self class stackEmptyErrorDescription.! !
+
+
+!OOStack methodsFor: 'accessing' stamp: 'GAA 4/26/2018 00:13:31'!
+isEmpty
+	^pila size = 1.! !
+
+!OOStack methodsFor: 'accessing' stamp: 'GAA 4/26/2018 00:19:11'!
 pop
-	^[pila removeLast.]
-		on: Error 
-		do: [:e | self error:self class stackEmptyErrorDescription]! !
+	^(pila removeLast) value.! !
 
-!OOStack methodsFor: 'as yet unclassified' stamp: 'GAA 4/24/2018 11:57:01'!
+!OOStack methodsFor: 'accessing' stamp: 'GAA 4/25/2018 23:57:00'!
 push: unElemento
-	pila add: unElemento.! !
+	pila add: [unElemento.].! !
 
-!OOStack methodsFor: 'as yet unclassified' stamp: 'GAA 4/24/2018 12:02:55'!
+!OOStack methodsFor: 'accessing' stamp: 'GAA 4/25/2018 23:48:12'!
 size
-	^pila size.! !
+	^pila size - 1.! !
 
-!OOStack methodsFor: 'as yet unclassified' stamp: 'GAA 4/24/2018 12:14:42'!
+!OOStack methodsFor: 'accessing' stamp: 'GAA 4/26/2018 00:18:48'!
 top
-	^[pila at:pila size.]
-		on: Error 
-		do: [:e | self error:self class stackEmptyErrorDescription]! !
+	^(pila at:(pila size)) value.! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
