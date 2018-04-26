@@ -144,15 +144,15 @@ Object subclass: #OOStack
 	poolDictionaries: ''
 	category: 'Stack-Exercise'!
 
-!OOStack methodsFor: 'private' stamp: 'GAA 4/26/2018 00:22:08'!
+!OOStack methodsFor: 'private' stamp: 'GAA 4/26/2018 11:28:10'!
 newStack
 	pila _ OrderedCollection new.
-	pila add: [self error: self errorStackVacio.].! !
+	pila add: [self errorStackVacio.].! !
 
 
-!OOStack methodsFor: 'errores' stamp: 'GAA 4/25/2018 23:41:25'!
+!OOStack methodsFor: 'errores' stamp: 'GAA 4/26/2018 11:27:57'!
 errorStackVacio
-	^self class stackEmptyErrorDescription.! !
+	^self error: self class stackEmptyErrorDescription.! !
 
 
 !OOStack methodsFor: 'accessing' stamp: 'GAA 4/26/2018 00:13:31'!
