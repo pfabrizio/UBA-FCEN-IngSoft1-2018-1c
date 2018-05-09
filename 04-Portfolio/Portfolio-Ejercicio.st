@@ -441,11 +441,12 @@ transactions
             inject: OrderedCollection new
             into: [ :transactions :account | transactions addAll: account transactions; yourself ]! !
 
-!Portfolio methodsFor: 'transactions' stamp: 'GAA 5/9/2018 12:19:10'!
+!Portfolio methodsFor: 'transactions' stamp: 'GAA 5/9/2018 16:58:19'!
 transactionsOf: anAccount 
 	|cuentaMonitoreada|
-	cuentaMonitoreada _ cuentas select: [:cuenta | (cuenta = anAccount ) | (cuenta manages: anAccount )].
-	^cuentaMonitoreada last transactions.! !
+	cuentaMonitoreada _ cuentas detect: [:cuenta | (cuenta = anAccount ) | (cuenta manages: anAccount )]
+		ifNone: [self error: (self class accountNotManagedMessageDescription) ].
+	^cuentaMonitoreada transactions.! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
@@ -453,18 +454,38 @@ transactionsOf: anAccount
 Portfolio class
 	instanceVariableNames: ''!
 
-!Portfolio class methodsFor: 'instance creation' stamp: 'GAA 5/9/2018 11:16:27'!
+!Portfolio class methodsFor: 'instance creation' stamp: 'GAA 5/9/2018 17:16:35'!
 with: anAccount1 with: anAccount2
 	|cuentas|
+	(anAccount1 manages: anAccount2) ifTrue: [self error: self accountAlreadyManagedErrorMessage ].
+	(anAccount2 manages: anAccount1) ifTrue: [self error: self accountAlreadyManagedErrorMessage ].
 	cuentas _ (OrderedCollection new).
 	cuentas add: anAccount1.
 	cuentas add: anAccount2. 
 	^(self new) initializeWith: cuentas.! !
 
-!Portfolio class methodsFor: 'instance creation' stamp: 'HernanWilkinson 7/13/2011 18:41'!
+!Portfolio class methodsFor: 'instance creation' stamp: 'GAA 5/9/2018 18:05:36'!
 withAll: aCollectionOfAccounts
+	|aBlock|
+	aBlock  _ [:cuenta | 
+		|mismaCuenta|
+		mismaCuenta _ aCollectionOfAccounts select: [:account | account manages: cuenta ].
+		Transcript addEntry:( mismaCuenta size printString ).
+		mismaCuenta size > 1.
+		
+		].
+	aCollectionOfAccounts detect: aBlock
+		ifFound: [:cuenta | ^self error: self accountAlreadyManagedErrorMessage ] 
+		ifNone: [^self new initializeWith: aCollectionOfAccounts ]! !
 
-	self shouldBeImplemented ! !
+
+!Portfolio class methodsFor: 'error' stamp: 'GAA 5/9/2018 16:59:55'!
+accountAlreadyManagedErrorMessage
+	^'accountAlreadyManaged'! !
+
+!Portfolio class methodsFor: 'error' stamp: 'GAA 5/9/2018 17:00:01'!
+accountNotManagedMessageDescription
+	^'accountNotManaged'! !
 
 
 !classDefinition: #ReceptiveAccount category: #'Portfolio-Ejercicio'!
