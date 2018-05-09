@@ -464,18 +464,17 @@ with: anAccount1 with: anAccount2
 	cuentas add: anAccount2. 
 	^(self new) initializeWith: cuentas.! !
 
-!Portfolio class methodsFor: 'instance creation' stamp: 'GAA 5/9/2018 18:05:36'!
+!Portfolio class methodsFor: 'instance creation' stamp: 'GAA 5/9/2018 18:52:57'!
 withAll: aCollectionOfAccounts
 	|aBlock|
 	aBlock  _ [:cuenta | 
 		|mismaCuenta|
 		mismaCuenta _ aCollectionOfAccounts select: [:account | account manages: cuenta ].
-		Transcript addEntry:( mismaCuenta size printString ).
 		mismaCuenta size > 1.
 		
 		].
 	aCollectionOfAccounts detect: aBlock
-		ifFound: [:cuenta | ^self error: self accountAlreadyManagedErrorMessage ] 
+		ifFound: [:cuenta | self error: self accountAlreadyManagedErrorMessage ] 
 		ifNone: [^self new initializeWith: aCollectionOfAccounts ]! !
 
 
