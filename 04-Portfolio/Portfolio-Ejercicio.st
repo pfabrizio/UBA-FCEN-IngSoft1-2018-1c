@@ -408,25 +408,25 @@ SummarizingAccount subclass: #Portfolio
 	poolDictionaries: ''
 	category: 'Portfolio-Ejercicio'!
 
-!Portfolio methodsFor: 'balance' stamp: 'GAA 5/9/2018 11:19:31'!
+!Portfolio methodsFor: 'balance' stamp: 'GAA 5/10/2018 11:49:46'!
 balance
-	|balanceTotal|
-	balanceTotal _ 0.
-	cuentas collect: [:cuenta | balanceTotal _ balanceTotal  + (cuenta balance)].
-	^balanceTotal .! !
+	
+	^cuentas
+		inject: 0
+		into: [:subTotal :cuenta| subTotal + (cuenta balance)].! !
 
 
-!Portfolio methodsFor: 'testing' stamp: 'GAA 5/9/2018 12:04:57'!
+!Portfolio methodsFor: 'testing' stamp: 'GAA 5/10/2018 11:55:47'!
 manages: anAccount
 	|resultado|
 	resultado _ cuentas select: [:cuenta | (cuenta = anAccount) | (cuenta manages: anAccount) ].
-	^resultado size > 0.! !
+	^resultado size = 1.! !
 
-!Portfolio methodsFor: 'testing' stamp: 'GAA 5/9/2018 11:33:17'!
+!Portfolio methodsFor: 'testing' stamp: 'GAA 5/10/2018 12:01:56'!
 registers: aTtransaction
 	|resultado|
-	resultado _ cuentas select: [:cuenta | cuenta registers: aTtransaction ].
-	^resultado size > 0.! !
+	resultado _ cuentas 	select:   [:cuenta | cuenta registers: aTtransaction ].
+	^resultado size = 1.! !
 
 
 !Portfolio methodsFor: 'initialization' stamp: 'GAA 5/9/2018 11:07:02'!
@@ -454,26 +454,25 @@ transactionsOf: anAccount
 Portfolio class
 	instanceVariableNames: ''!
 
-!Portfolio class methodsFor: 'instance creation' stamp: 'GAA 5/9/2018 17:16:35'!
+!Portfolio class methodsFor: 'instance creation' stamp: 'GAA 5/10/2018 11:45:10'!
 with: anAccount1 with: anAccount2
 	|cuentas|
-	(anAccount1 manages: anAccount2) ifTrue: [self error: self accountAlreadyManagedErrorMessage ].
-	(anAccount2 manages: anAccount1) ifTrue: [self error: self accountAlreadyManagedErrorMessage ].
 	cuentas _ (OrderedCollection new).
 	cuentas add: anAccount1.
 	cuentas add: anAccount2. 
-	^(self new) initializeWith: cuentas.! !
+	^self withAll: cuentas.! !
 
-!Portfolio class methodsFor: 'instance creation' stamp: 'GAA 5/9/2018 18:52:57'!
+!Portfolio class methodsFor: 'instance creation' stamp: 'GAA 5/10/2018 11:43:06'!
 withAll: aCollectionOfAccounts
-	|aBlock|
-	aBlock  _ [:cuenta | 
+	"Verifico que no se repitan las cuentas o portfolios
+	 que recibimos para crear un portfolio nuevo"
+	|cuentasRepetidas|
+	cuentasRepetidas  _ [:cuenta | 
 		|mismaCuenta|
 		mismaCuenta _ aCollectionOfAccounts select: [:account | account manages: cuenta ].
 		mismaCuenta size > 1.
-		
 		].
-	aCollectionOfAccounts detect: aBlock
+	aCollectionOfAccounts detect: cuentasRepetidas
 		ifFound: [:cuenta | self error: self accountAlreadyManagedErrorMessage ] 
 		ifNone: [^self new initializeWith: aCollectionOfAccounts ]! !
 
