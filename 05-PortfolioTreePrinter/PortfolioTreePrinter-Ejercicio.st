@@ -526,15 +526,15 @@ investmentNetOf: aReceptiveAccount
 	
 	^aReceptiveAccount investmentNet.! !
 
-!PortfolioTest methodsFor: 'test support' stamp: 'HernanWilkinson 9/6/2016 19:43'!
+!PortfolioTest methodsFor: 'test support' stamp: 'PGF 5/10/2018 21:16:39'!
 portofolioTreeOf: aPortfolio namingAccountWith: aDictionary 
 	
-	self shouldBeImplemented ! !
+	^aPortfolio treeOfnamingAccountWith: aDictionary.! !
 
-!PortfolioTest methodsFor: 'test support' stamp: 'HernanWilkinson 9/6/2016 19:43'!
+!PortfolioTest methodsFor: 'test support' stamp: 'PGF 5/10/2018 21:41:54'!
 reversePortofolioTreeOf: aPortfolio namingAccountWith: aDictionary 
 	
-	self shouldBeImplemented ! !
+	^aPortfolio reverseTreeOfnamingAccountWith: aDictionary.! !
 
 
 !classDefinition: #AccountTransaction category: #'PortfolioTreePrinter-Ejercicio'!
@@ -543,7 +543,6 @@ Object subclass: #AccountTransaction
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'PortfolioTreePrinter-Ejercicio'!
-
 
 !AccountTransaction methodsFor: 'evaluating' stamp: 'HernanWilkinson 7/14/2011 06:48'!
 value
@@ -741,7 +740,6 @@ transactions
 
 	self subclassResponsibility ! !
 
-
 
 !classDefinition: #Portfolio category: #'PortfolioTreePrinter-Ejercicio'!
 SummarizingAccount subclass: #Portfolio
@@ -749,7 +747,6 @@ SummarizingAccount subclass: #Portfolio
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'PortfolioTreePrinter-Ejercicio'!
-
 
 !Portfolio methodsFor: 'testing' stamp: 'HAW 5/8/2018 16:46:26'!
 anyManagedAccountManages: anAccount 
@@ -773,6 +770,14 @@ balance
 	^ accounts sum: [ :account | account balance ]
 ! !
 
+!Portfolio methodsFor: 'transactions' stamp: 'PGF 5/10/2018 21:43:32'!
+reverseTreeOfnamingAccountWith: aDictionary
+	|arbol|
+	arbol _ self treeOfnamingAccountWith: aDictionary.
+	^arbol reversed.
+	
+! !
+
 !Portfolio methodsFor: 'transactions' stamp: 'HAW 9/25/2017 19:40:20'!
 transactions 
 
@@ -788,6 +793,21 @@ transactionsOf: anAccount
 		ifTrue: [ anAccount transactions ] 
 		ifFalse: [ self error: self class accountNotManagedMessageDescription]
 	! !
+
+!Portfolio methodsFor: 'transactions' stamp: 'PGF 5/10/2018 21:38:13'!
+treeOfnamingAccountWith: aDictionary
+	|arbol|
+	arbol _ (OrderedCollection new).
+	arbol add: (aDictionary at: self).
+	^accounts inject: arbol 
+			into: [:lines :account|
+				|arbolito|
+				arbolito _ account treeOfnamingAccountWith:aDictionary .
+				arbolito _ arbolito collect: [:aNodeName | ' ' append: aNodeName ].
+				lines addAll: arbolito ; yourself. 
+				]
+	
+! !
 
 
 !Portfolio methodsFor: 'initialization' stamp: 'PGF 5/7/2018 21:50:00'!
@@ -908,7 +928,6 @@ transferNet
 			].! !
 
 
-
 !ReceptiveAccount methodsFor: 'testing' stamp: 'HernanWilkinson 7/13/2011 18:37'!
 manages: anAccount
 
@@ -929,6 +948,14 @@ accountSummary
 			ifTrue: [aTransaction printDescription:self] 
 			ifFalse: [aTransaction printDescription.]
 			].! !
+
+
+!ReceptiveAccount methodsFor: 'as yet unclassified' stamp: 'PGF 5/10/2018 21:30:44'!
+treeOfnamingAccountWith:aDictionary
+	|arbol|
+	arbol _ (OrderedCollection new).
+	arbol add:( aDictionary at:self).
+	^arbol.! !
 
 
 !classDefinition: #Transfer category: #'PortfolioTreePrinter-Ejercicio'!
