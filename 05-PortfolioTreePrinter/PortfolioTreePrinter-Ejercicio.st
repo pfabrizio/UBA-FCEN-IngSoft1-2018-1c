@@ -597,6 +597,10 @@ modifyBalance: aBalance
 printDescription
 	^'Plazo fijo por ', value printString, ' durante ', numberOfDays printString , ' dias a una tna de ', (tna*100) printString, '%'. ! !
 
+!CertificateOfDeposit methodsFor: 'as yet unclassified' stamp: 'GAA 5/11/2018 15:01:22'!
+transferNet:aBalance
+	^aBalance.! !
+
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
 !classDefinition: 'CertificateOfDeposit class' category: #'PortfolioTreePrinter-Ejercicio'!
@@ -641,6 +645,11 @@ value
 
 	^ value! !
 
+
+!Deposit methodsFor: 'as yet unclassified' stamp: 'GAA 5/11/2018 15:01:37'!
+transferNet:aBalance
+	^aBalance.! !
+
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
 !classDefinition: 'Deposit class' category: #'PortfolioTreePrinter-Ejercicio'!
@@ -661,6 +670,112 @@ register: aValue on: account
 	account register: withdraw.
 		
 	^ withdraw! !
+
+
+!classDefinition: #TransferDeposit category: #'PortfolioTreePrinter-Ejercicio'!
+AccountTransaction subclass: #TransferDeposit
+	instanceVariableNames: 'transfer'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'PortfolioTreePrinter-Ejercicio'!
+
+!TransferDeposit methodsFor: 'transfer' stamp: 'GAA 5/11/2018 15:09:37'!
+creditor
+	^transfer creditor.! !
+
+!TransferDeposit methodsFor: 'transfer' stamp: 'GAA 5/11/2018 15:10:05'!
+debtor
+	^transfer debtor.! !
+
+!TransferDeposit methodsFor: 'transfer' stamp: 'GAA 5/11/2018 14:39:18'!
+transfer
+	^transfer.! !
+
+!TransferDeposit methodsFor: 'transfer' stamp: 'GAA 5/11/2018 15:02:07'!
+transferNet:aBalance
+	^aBalance + self value.! !
+
+
+!TransferDeposit methodsFor: 'value' stamp: 'GAA 5/11/2018 14:42:38'!
+modifyBalance: aBalance
+	^aBalance + self value.! !
+
+!TransferDeposit methodsFor: 'value' stamp: 'GAA 5/11/2018 14:40:55'!
+value
+	^transfer value.! !
+
+
+!TransferDeposit methodsFor: 'printing' stamp: 'GAA 5/11/2018 14:51:06'!
+printDescription
+	^'Transferencia por ', self value printString.! !
+
+
+!TransferDeposit methodsFor: 'private' stamp: 'GAA 5/11/2018 14:46:13'!
+initializeWith: aTransfer
+	transfer _ aTransfer.! !
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'TransferDeposit class' category: #'PortfolioTreePrinter-Ejercicio'!
+TransferDeposit class
+	instanceVariableNames: ''!
+
+!TransferDeposit class methodsFor: 'instance creation' stamp: 'GAA 5/11/2018 14:45:37'!
+fromTransfer: aTransfer
+	^(self new) initializeWith: aTransfer.! !
+
+
+!classDefinition: #TransferWithdraw category: #'PortfolioTreePrinter-Ejercicio'!
+AccountTransaction subclass: #TransferWithdraw
+	instanceVariableNames: 'transfer'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'PortfolioTreePrinter-Ejercicio'!
+
+!TransferWithdraw methodsFor: 'value' stamp: 'GAA 5/11/2018 14:43:42'!
+modifyBalance: aBalance
+	^aBalance - self value.! !
+
+!TransferWithdraw methodsFor: 'value' stamp: 'GAA 5/11/2018 14:43:29'!
+value
+	^transfer value.! !
+
+
+!TransferWithdraw methodsFor: 'private' stamp: 'GAA 5/11/2018 14:46:51'!
+initializeWith: aTransfer
+	transfer _ aTransfer.! !
+
+
+!TransferWithdraw methodsFor: 'printing' stamp: 'GAA 5/11/2018 14:50:42'!
+printDescription
+	^'Transferencia por ', self value negated printString.! !
+
+
+!TransferWithdraw methodsFor: 'transfer' stamp: 'GAA 5/11/2018 15:10:30'!
+creditor
+	^transfer creditor.! !
+
+!TransferWithdraw methodsFor: 'transfer' stamp: 'GAA 5/11/2018 15:10:18'!
+debtor
+	^transfer debtor.! !
+
+!TransferWithdraw methodsFor: 'transfer' stamp: 'GAA 5/11/2018 14:47:51'!
+transfer
+	^transfer.! !
+
+!TransferWithdraw methodsFor: 'transfer' stamp: 'GAA 5/11/2018 15:02:41'!
+transferNet:aBalance
+	^aBalance - self value.! !
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'TransferWithdraw class' category: #'PortfolioTreePrinter-Ejercicio'!
+TransferWithdraw class
+	instanceVariableNames: ''!
+
+!TransferWithdraw class methodsFor: 'instance creation' stamp: 'GAA 5/11/2018 14:47:09'!
+fromTransfer: aTransfer
+	^(self new) initializeWith: aTransfer.! !
 
 
 !classDefinition: #Withdraw category: #'PortfolioTreePrinter-Ejercicio'!
@@ -689,6 +804,11 @@ modifyBalance: aBalance
 value
 
 	^ value! !
+
+
+!Withdraw methodsFor: 'as yet unclassified' stamp: 'GAA 5/11/2018 15:02:53'!
+transferNet:aBalance
+	^aBalance.! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
@@ -888,16 +1008,12 @@ initialize
 	transactions := OrderedCollection new.! !
 
 
-!ReceptiveAccount methodsFor: 'transactions' stamp: 'PGF 5/10/2018 19:46:19'!
+!ReceptiveAccount methodsFor: 'transactions' stamp: 'GAA 5/11/2018 14:56:49'!
 balance
+	^ transactions inject: 0 into: [ :balance :transaction |transaction modifyBalance:balance.].! !
 
-	^ transactions inject: 0 into: [ :balance :transaction | 
-			(transaction isKindOf: Transfer) ifTrue: [transaction modifyBalance:balance for:self] ifFalse: [transaction modifyBalance:balance].
-			].! !
-
-!ReceptiveAccount methodsFor: 'transactions' stamp: 'PGF 5/10/2018 20:51:58'!
+!ReceptiveAccount methodsFor: 'transactions' stamp: 'GAA 5/11/2018 14:57:20'!
 investmentEarnings
-
 	^ transactions inject: 0 into: [ :balance :transaction | 
 			(transaction isKindOf: CertificateOfDeposit ) ifTrue: [balance + transaction investmentEarnings] ifFalse: [balance.].
 			].! !
@@ -909,23 +1025,18 @@ investmentNet
 			(transaction isKindOf: CertificateOfDeposit ) ifTrue: [balance + transaction value] ifFalse: [balance.].
 			].! !
 
-!ReceptiveAccount methodsFor: 'transactions' stamp: 'HernanWilkinson 7/13/2011 18:37'!
+!ReceptiveAccount methodsFor: 'transactions' stamp: 'GAA 5/11/2018 14:57:42'!
 register: aTransaction
-
-	transactions add: aTransaction 
+	transactions add: aTransaction
 ! !
 
-!ReceptiveAccount methodsFor: 'transactions' stamp: 'HernanWilkinson 7/13/2011 18:37'!
-transactions 
-
+!ReceptiveAccount methodsFor: 'transactions' stamp: 'GAA 5/11/2018 14:57:49'!
+transactions
 	^ transactions copy! !
 
-!ReceptiveAccount methodsFor: 'transactions' stamp: 'PGF 5/10/2018 20:09:43'!
+!ReceptiveAccount methodsFor: 'transactions' stamp: 'GAA 5/11/2018 15:00:03'!
 transferNet
-
-	^ transactions inject: 0 into: [ :balance :transaction | 
-			(transaction isKindOf: Transfer) ifTrue: [transaction modifyBalance:balance for:self] ifFalse: [balance.].
-			].! !
+	^ transactions inject: 0 into: [ :balance :transaction | transaction transferNet:balance.].! !
 
 
 !ReceptiveAccount methodsFor: 'testing' stamp: 'HernanWilkinson 7/13/2011 18:37'!
@@ -934,23 +1045,17 @@ manages: anAccount
 	^ self = anAccount 
 ! !
 
-!ReceptiveAccount methodsFor: 'testing' stamp: 'HernanWilkinson 7/13/2011 18:37'!
+!ReceptiveAccount methodsFor: 'testing' stamp: 'GAA 5/11/2018 15:03:57'!
 registers: aTtransaction
-
-	^ transactions includes: aTtransaction 
-! !
+	^ transactions includes: aTtransaction.! !
 
 
-!ReceptiveAccount methodsFor: 'texting' stamp: 'PGF 5/10/2018 20:01:05'!
+!ReceptiveAccount methodsFor: 'texting' stamp: 'GAA 5/11/2018 14:56:11'!
 accountSummary
-	^transactions collect: [:aTransaction | 
-		(aTransaction isKindOf: Transfer) 
-			ifTrue: [aTransaction printDescription:self] 
-			ifFalse: [aTransaction printDescription.]
-			].! !
+	^transactions collect: [:aTransaction | aTransaction printDescription.].! !
 
 
-!ReceptiveAccount methodsFor: 'as yet unclassified' stamp: 'PGF 5/10/2018 21:30:44'!
+!ReceptiveAccount methodsFor: 'as yet unclassified' stamp: 'GAA 5/11/2018 15:03:40'!
 treeOfnamingAccountWith:aDictionary
 	|arbol|
 	arbol _ (OrderedCollection new).
@@ -972,36 +1077,24 @@ initializeFor: aValue fromAccount: aDebtor toAccount: aCreditor
 	creditor _ aCreditor.! !
 
 
+!Transfer methodsFor: 'transfer' stamp: 'GAA 5/11/2018 15:07:47'!
+creditor
+	^creditor.! !
+
+!Transfer methodsFor: 'transfer' stamp: 'GAA 5/11/2018 15:07:35'!
+debtor
+	^debtor.! !
+
 !Transfer methodsFor: 'transfer' stamp: 'PGF 5/10/2018 19:07:51'!
 transfer
 	"Me devuelvo"! !
 
 
-!Transfer methodsFor: 'printing' stamp: 'PGF 5/10/2018 19:58:23'!
-printDescription:anAccount
-	|valor|
-	(debtor = anAccount ) ifTrue: [valor _ value negated].
-	(creditor = anAccount ) ifTrue: [valor  _ value].
-	^'Transferencia por ', valor printString.! !
-
-
-!Transfer methodsFor: 'value' stamp: 'PGF 5/10/2018 19:43:19'!
-modifyBalance: aBalance for:anAccount
-	|newBalance|
-	(debtor = anAccount ) ifTrue: [newBalance _ aBalance - value].
-	(creditor = anAccount ) ifTrue: [newBalance  _ aBalance + value].
-	^newBalance.! !
 
 !Transfer methodsFor: 'value' stamp: 'PGF 5/10/2018 19:04:33'!
 value
 
 	^ value ! !
-
-!Transfer methodsFor: 'value' stamp: 'PGF 5/10/2018 19:33:50'!
-value:anAccount
-
-	(debtor = anAccount ) ifTrue: [^value].
-	(creditor = anAccount ) ifTrue: [^ value negated ]! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
@@ -1009,16 +1102,16 @@ value:anAccount
 Transfer class
 	instanceVariableNames: ''!
 
-!Transfer class methodsFor: 'transfering' stamp: 'PGF 5/10/2018 19:28:50'!
+!Transfer class methodsFor: 'transfering' stamp: 'GAA 5/11/2018 14:55:01'!
 register: anAmount from: aReceptiveAccountFrom to: aReceptiveAccountTo
-	|transfer|
+	|transfer transferDeposit transferWithdraw|
 	transfer _ (self new) initializeFor: anAmount 
 			fromAccount: aReceptiveAccountFrom 
 			toAccount: aReceptiveAccountTo.
-	aReceptiveAccountFrom register: transfer.
-	"Withdraw register: anAmount on: aReceptiveAccountFrom."
-	aReceptiveAccountTo register: transfer .
-	"Deposit register: anAmount on: aReceptiveAccountTo."
+	transferDeposit _ TransferDeposit fromTransfer: transfer.
+	transferWithdraw _ TransferWithdraw fromTransfer: transfer.
+	aReceptiveAccountFrom register: transferWithdraw .
+	aReceptiveAccountTo register: transferDeposit.
 	^transfer.! !
 
 
