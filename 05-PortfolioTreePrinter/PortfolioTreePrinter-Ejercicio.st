@@ -506,25 +506,25 @@ test29ReversePortfolioTreePrinterPrintsTheCompositeStartingFromTheLeaves
 	! !
 
 
-!PortfolioTest methodsFor: 'test support' stamp: 'HAW 9/25/2017 21:44:47'!
+!PortfolioTest methodsFor: 'test support' stamp: 'GAA 5/14/2018 18:13:58'!
 accountSummaryLinesOf: aReceptiveAccount 
 	
-	^aReceptiveAccount accountSummary! !
+	^(AccountSummary of:aReceptiveAccount ) value.! !
 
-!PortfolioTest methodsFor: 'test support' stamp: 'PGF 5/10/2018 20:06:12'!
+!PortfolioTest methodsFor: 'test support' stamp: 'GAA 5/14/2018 18:14:27'!
 accountTransferNetOf: aReceptiveAccount 
 	
-	^aReceptiveAccount transferNet.! !
+	^(TransferNet of:aReceptiveAccount) value.! !
 
-!PortfolioTest methodsFor: 'test support' stamp: 'PGF 5/10/2018 20:50:49'!
+!PortfolioTest methodsFor: 'test support' stamp: 'GAA 5/14/2018 18:52:12'!
 investmentEarningsOf: aReceptiveAccount 
 	
-	^aReceptiveAccount investmentEarnings.! !
+	^(InvestmentEarnings of:aReceptiveAccount) value.! !
 
-!PortfolioTest methodsFor: 'test support' stamp: 'PGF 5/10/2018 20:57:14'!
+!PortfolioTest methodsFor: 'test support' stamp: 'GAA 5/14/2018 19:05:49'!
 investmentNetOf: aReceptiveAccount 
 	
-	^aReceptiveAccount investmentNet.! !
+	^(InvestmentNet of: aReceptiveAccount) value.! !
 
 !PortfolioTest methodsFor: 'test support' stamp: 'PGF 5/10/2018 21:16:39'!
 portofolioTreeOf: aPortfolio namingAccountWith: aDictionary 
@@ -580,26 +580,26 @@ initializeFor: anAmount during: aDuration at:anInterest onAccount: anAccount.
 	tna _ anInterest .
 	account _ anAccount .! !
 
-!CertificateOfDeposit methodsFor: 'private' stamp: 'PGF 5/10/2018 20:53:21'!
-investmentEarnings
-	^(value*(tna/360)*numberOfDays).! !
-
 !CertificateOfDeposit methodsFor: 'private' stamp: 'PGF 5/10/2018 20:40:43'!
 value
 	^value.! !
 
 
+!CertificateOfDeposit methodsFor: 'as yet unclassified' stamp: 'GAA 5/14/2018 18:42:31'!
+annualInterest
+	^tna.! !
+
 !CertificateOfDeposit methodsFor: 'as yet unclassified' stamp: 'PGF 5/10/2018 20:58:47'!
 modifyBalance: aBalance
 	^aBalance - value .! !
 
-!CertificateOfDeposit methodsFor: 'as yet unclassified' stamp: 'PGF 5/10/2018 21:01:44'!
-printDescription
-	^'Plazo fijo por ', value printString, ' durante ', numberOfDays printString , ' dias a una tna de ', (tna*100) printString, '%'. ! !
+!CertificateOfDeposit methodsFor: 'as yet unclassified' stamp: 'GAA 5/14/2018 18:41:57'!
+numberOfDays
+	^numberOfDays! !
 
-!CertificateOfDeposit methodsFor: 'as yet unclassified' stamp: 'GAA 5/11/2018 15:01:22'!
-transferNet:aBalance
-	^aBalance.! !
+!CertificateOfDeposit methodsFor: 'as yet unclassified' stamp: 'GAA 5/14/2018 18:34:23'!
+whoIs: aMethodObject 
+	^aMethodObject certificateOfDeposit: self.! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
@@ -631,10 +631,6 @@ initializeFor: aValue
 	value := aValue ! !
 
 
-!Deposit methodsFor: 'printing' stamp: 'PGF 5/10/2018 19:54:38'!
-printDescription
-	^'Deposito por ', value printString .! !
-
 
 !Deposit methodsFor: 'value' stamp: 'PGF 5/10/2018 19:44:07'!
 modifyBalance: aBalance
@@ -646,9 +642,9 @@ value
 	^ value! !
 
 
-!Deposit methodsFor: 'as yet unclassified' stamp: 'GAA 5/11/2018 15:01:37'!
-transferNet:aBalance
-	^aBalance.! !
+!Deposit methodsFor: 'as yet unclassified' stamp: 'GAA 5/14/2018 18:17:25'!
+whoIs: aMethodObject 
+	^aMethodObject transactionDeposit: self.! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
@@ -691,10 +687,6 @@ debtor
 transfer
 	^transfer.! !
 
-!TransferDeposit methodsFor: 'transfer' stamp: 'GAA 5/11/2018 15:02:07'!
-transferNet:aBalance
-	^aBalance + self value.! !
-
 
 !TransferDeposit methodsFor: 'value' stamp: 'GAA 5/11/2018 14:42:38'!
 modifyBalance: aBalance
@@ -705,14 +697,15 @@ value
 	^transfer value.! !
 
 
-!TransferDeposit methodsFor: 'printing' stamp: 'GAA 5/11/2018 14:51:06'!
-printDescription
-	^'Transferencia por ', self value printString.! !
-
 
 !TransferDeposit methodsFor: 'private' stamp: 'GAA 5/11/2018 14:46:13'!
 initializeWith: aTransfer
 	transfer _ aTransfer.! !
+
+
+!TransferDeposit methodsFor: 'as yet unclassified' stamp: 'GAA 5/14/2018 18:26:40'!
+whoIs: aMethodObject
+	^aMethodObject transactionTransferDeposit: self.! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
@@ -746,10 +739,6 @@ initializeWith: aTransfer
 	transfer _ aTransfer.! !
 
 
-!TransferWithdraw methodsFor: 'printing' stamp: 'GAA 5/11/2018 14:50:42'!
-printDescription
-	^'Transferencia por ', self value negated printString.! !
-
 
 !TransferWithdraw methodsFor: 'transfer' stamp: 'GAA 5/11/2018 15:10:30'!
 creditor
@@ -763,9 +752,10 @@ debtor
 transfer
 	^transfer.! !
 
-!TransferWithdraw methodsFor: 'transfer' stamp: 'GAA 5/11/2018 15:02:41'!
-transferNet:aBalance
-	^aBalance - self value.! !
+
+!TransferWithdraw methodsFor: 'as yet unclassified' stamp: 'GAA 5/14/2018 18:24:15'!
+whoIs: aMethodObject 
+	^aMethodObject transactionTransferWithdraw: self.! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
@@ -791,10 +781,6 @@ initializeFor: aValue
 	value := aValue ! !
 
 
-!Withdraw methodsFor: 'printing' stamp: 'PGF 5/10/2018 19:55:34'!
-printDescription
-	^'Extraccion por ', value printString.! !
-
 
 !Withdraw methodsFor: 'value' stamp: 'PGF 5/10/2018 19:43:56'!
 modifyBalance: aBalance
@@ -806,9 +792,9 @@ value
 	^ value! !
 
 
-!Withdraw methodsFor: 'as yet unclassified' stamp: 'GAA 5/11/2018 15:02:53'!
-transferNet:aBalance
-	^aBalance.! !
+!Withdraw methodsFor: 'as yet unclassified' stamp: 'GAA 5/14/2018 18:21:05'!
+whoIs: aMethodObject
+	^aMethodObject transactionWithdraw: self.! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
@@ -830,6 +816,195 @@ register: aValue on: account
 	account register: withdraw.
 		
 	^ withdraw! !
+
+
+!classDefinition: #MethodObject category: #'PortfolioTreePrinter-Ejercicio'!
+Object subclass: #MethodObject
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'PortfolioTreePrinter-Ejercicio'!
+
+!MethodObject methodsFor: 'value' stamp: 'GAA 5/14/2018 19:12:48'!
+value
+	self subclassResponsibility! !
+
+
+!MethodObject methodsFor: 'as yet unclassified' stamp: 'GAA 5/14/2018 19:13:51'!
+certificateOfDeposit: aCertificateOfDeposit! !
+
+!MethodObject methodsFor: 'as yet unclassified' stamp: 'GAA 5/14/2018 19:14:26'!
+transactionDeposit: aDepositTransaction
+! !
+
+!MethodObject methodsFor: 'as yet unclassified' stamp: 'GAA 5/14/2018 19:14:56'!
+transactionTransferDeposit: aTransferDepositTransaction! !
+
+!MethodObject methodsFor: 'as yet unclassified' stamp: 'GAA 5/14/2018 19:15:06'!
+transactionTransferWithdraw: aTransferWithdrawTransaction! !
+
+!MethodObject methodsFor: 'as yet unclassified' stamp: 'GAA 5/14/2018 19:15:21'!
+transactionWithdraw: aWithdrawTransaction! !
+
+
+!classDefinition: #AccountSummary category: #'PortfolioTreePrinter-Ejercicio'!
+MethodObject subclass: #AccountSummary
+	instanceVariableNames: 'account lines'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'PortfolioTreePrinter-Ejercicio'!
+
+!AccountSummary methodsFor: 'as yet unclassified' stamp: 'GAA 5/14/2018 18:40:36'!
+certificateOfDeposit: aCertificateOfDeposit 
+	^lines
+		add:'Plazo fijo por ', 
+			aCertificateOfDeposit value printString, 
+			' durante ', 
+			aCertificateOfDeposit numberOfDays printString , 
+			' dias a una tna de ',
+			 ((aCertificateOfDeposit annualInterest )*100) printString, '%'.! !
+
+!AccountSummary methodsFor: 'as yet unclassified' stamp: 'GAA 5/14/2018 18:01:09'!
+initializeWith:anAccount
+	account _ anAccount.! !
+
+!AccountSummary methodsFor: 'as yet unclassified' stamp: 'GAA 5/14/2018 18:19:45'!
+transactionDeposit: aDepositTransaction
+	^lines add: 'Deposito por ', aDepositTransaction value printString.! !
+
+!AccountSummary methodsFor: 'as yet unclassified' stamp: 'GAA 5/14/2018 18:27:28'!
+transactionTransferDeposit: aTransferDepositTransaction
+	^lines add:'Transferencia por ', aTransferDepositTransaction value printString.! !
+
+!AccountSummary methodsFor: 'as yet unclassified' stamp: 'GAA 5/14/2018 18:25:16'!
+transactionTransferWithdraw: aTransferWithdrawTransaction
+	^lines add:'Transferencia por ', aTransferWithdrawTransaction value negated printString.! !
+
+!AccountSummary methodsFor: 'as yet unclassified' stamp: 'GAA 5/14/2018 18:22:55'!
+transactionWithdraw: aWithdrawTransaction
+	^lines add:'Extraccion por ', aWithdrawTransaction value printString.! !
+
+!AccountSummary methodsFor: 'as yet unclassified' stamp: 'GAA 5/14/2018 18:28:48'!
+value
+	lines _ OrderedCollection new.
+	account transactionsDo: [:aTransaction | aTransaction whoIs:self.].
+	^lines.! !
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'AccountSummary class' category: #'PortfolioTreePrinter-Ejercicio'!
+AccountSummary class
+	instanceVariableNames: ''!
+
+!AccountSummary class methodsFor: 'class initialization' stamp: 'GAA 5/14/2018 18:13:18'!
+of: anAccount
+	^self new initializeWith: anAccount.! !
+
+
+!classDefinition: #InvestmentEarnings category: #'PortfolioTreePrinter-Ejercicio'!
+MethodObject subclass: #InvestmentEarnings
+	instanceVariableNames: 'account value'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'PortfolioTreePrinter-Ejercicio'!
+
+!InvestmentEarnings methodsFor: 'private' stamp: 'GAA 5/14/2018 18:51:43'!
+initializeWith: anAccount
+	account _ anAccount.! !
+
+
+!InvestmentEarnings methodsFor: 'value' stamp: 'GAA 5/14/2018 18:50:18'!
+value
+	value _ 0.
+	account transactionsDo: [:aTransaction | aTransaction whoIs:self.].
+	^value! !
+
+
+!InvestmentEarnings methodsFor: 'as yet unclassified' stamp: 'GAA 5/14/2018 18:54:32'!
+certificateOfDeposit: aCertificateOfDeposit 
+	value _ value + ( (aCertificateOfDeposit value)*(aCertificateOfDeposit annualInterest /360)* (aCertificateOfDeposit numberOfDays) ).! !
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'InvestmentEarnings class' category: #'PortfolioTreePrinter-Ejercicio'!
+InvestmentEarnings class
+	instanceVariableNames: ''!
+
+!InvestmentEarnings class methodsFor: 'class initialization' stamp: 'GAA 5/14/2018 18:51:14'!
+of: anAccount
+	^self new initializeWith: anAccount.! !
+
+
+!classDefinition: #InvestmentNet category: #'PortfolioTreePrinter-Ejercicio'!
+MethodObject subclass: #InvestmentNet
+	instanceVariableNames: 'account value'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'PortfolioTreePrinter-Ejercicio'!
+
+!InvestmentNet methodsFor: 'private' stamp: 'GAA 5/14/2018 19:05:21'!
+initializeWith: anAccount
+	account _ anAccount.! !
+
+
+!InvestmentNet methodsFor: 'value' stamp: 'GAA 5/14/2018 19:04:45'!
+value
+	value _ 0.
+	account transactionsDo: [:aTransaction | aTransaction whoIs:self.].
+	^value! !
+
+
+!InvestmentNet methodsFor: 'as yet unclassified' stamp: 'GAA 5/14/2018 19:08:08'!
+certificateOfDeposit: aCertificateOfDeposit 
+	value _ value + aCertificateOfDeposit value.! !
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'InvestmentNet class' category: #'PortfolioTreePrinter-Ejercicio'!
+InvestmentNet class
+	instanceVariableNames: ''!
+
+!InvestmentNet class methodsFor: 'class initialization' stamp: 'GAA 5/14/2018 19:05:00'!
+of: anAccount
+	^self new initializeWith: anAccount.! !
+
+
+!classDefinition: #TransferNet category: #'PortfolioTreePrinter-Ejercicio'!
+MethodObject subclass: #TransferNet
+	instanceVariableNames: 'account value'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'PortfolioTreePrinter-Ejercicio'!
+
+!TransferNet methodsFor: 'value' stamp: 'GAA 5/14/2018 18:30:27'!
+value
+	value _ 0.
+	account transactionsDo: [:aTransaction | aTransaction whoIs:self.].
+	^value.! !
+
+
+!TransferNet methodsFor: 'private' stamp: 'GAA 5/14/2018 18:03:20'!
+initializeWith:anAccount
+	account _ anAccount.! !
+
+
+!TransferNet methodsFor: 'as yet unclassified' stamp: 'GAA 5/14/2018 18:32:46'!
+transactionTransferDeposit: aTransferDepositTransaction
+	value _ value + aTransferDepositTransaction value.! !
+
+!TransferNet methodsFor: 'as yet unclassified' stamp: 'GAA 5/14/2018 18:32:11'!
+transactionTransferWithdraw: aTransferWithdrawTransaction
+	value _ value - aTransferWithdrawTransaction value.! !
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'TransferNet class' category: #'PortfolioTreePrinter-Ejercicio'!
+TransferNet class
+	instanceVariableNames: ''!
+
+!TransferNet class methodsFor: 'class initialization' stamp: 'GAA 5/14/2018 18:13:29'!
+of:anAccount
+	^self new initializeWith: anAccount.! !
 
 
 !classDefinition: #SummarizingAccount category: #'PortfolioTreePrinter-Ejercicio'!
@@ -1012,12 +1187,6 @@ initialize
 balance
 	^ transactions inject: 0 into: [ :balance :transaction |transaction modifyBalance:balance.].! !
 
-!ReceptiveAccount methodsFor: 'transactions' stamp: 'GAA 5/11/2018 14:57:20'!
-investmentEarnings
-	^ transactions inject: 0 into: [ :balance :transaction | 
-			(transaction isKindOf: CertificateOfDeposit ) ifTrue: [balance + transaction investmentEarnings] ifFalse: [balance.].
-			].! !
-
 !ReceptiveAccount methodsFor: 'transactions' stamp: 'PGF 5/10/2018 20:40:22'!
 investmentNet
 
@@ -1034,9 +1203,9 @@ register: aTransaction
 transactions
 	^ transactions copy! !
 
-!ReceptiveAccount methodsFor: 'transactions' stamp: 'GAA 5/11/2018 15:00:03'!
-transferNet
-	^ transactions inject: 0 into: [ :balance :transaction | transaction transferNet:balance.].! !
+!ReceptiveAccount methodsFor: 'transactions' stamp: 'GAA 5/14/2018 18:07:43'!
+transactionsDo:aBlockClousure
+	^transactions do:aBlockClousure.! !
 
 
 !ReceptiveAccount methodsFor: 'testing' stamp: 'HernanWilkinson 7/13/2011 18:37'!
@@ -1049,10 +1218,6 @@ manages: anAccount
 registers: aTtransaction
 	^ transactions includes: aTtransaction.! !
 
-
-!ReceptiveAccount methodsFor: 'texting' stamp: 'GAA 5/11/2018 14:56:11'!
-accountSummary
-	^transactions collect: [:aTransaction | aTransaction printDescription.].! !
 
 
 !ReceptiveAccount methodsFor: 'as yet unclassified' stamp: 'GAA 5/11/2018 15:03:40'!
@@ -1088,7 +1253,6 @@ debtor
 !Transfer methodsFor: 'transfer' stamp: 'PGF 5/10/2018 19:07:51'!
 transfer
 	"Me devuelvo"! !
-
 
 
 !Transfer methodsFor: 'value' stamp: 'PGF 5/10/2018 19:04:33'!
