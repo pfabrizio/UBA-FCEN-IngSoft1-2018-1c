@@ -573,6 +573,13 @@ AccountTransaction subclass: #CertificateOfDeposit
 	poolDictionaries: ''
 	category: 'PortfolioTreePrinter-Ejercicio'!
 
+!CertificateOfDeposit methodsFor: 'private' stamp: 'PGF 5/10/2018 20:36:31'!
+initializeFor: anAmount during: aDuration at:anInterest onAccount: anAccount.
+	value _ anAmount .
+	numberOfDays _ aDuration .
+	tna _ anInterest .
+	account _ anAccount .! !
+
 !CertificateOfDeposit methodsFor: 'private' stamp: 'PGF 5/10/2018 20:53:21'!
 investmentEarnings
 	^(value*(tna/360)*numberOfDays).! !
@@ -582,22 +589,13 @@ value
 	^value.! !
 
 
-!CertificateOfDeposit methodsFor: 'initialization' stamp: 'PGF 5/10/2018 20:36:31'!
-initializeFor: anAmount during: aDuration at:anInterest onAccount: anAccount.
-	value _ anAmount .
-	numberOfDays _ aDuration .
-	tna _ anInterest .
-	account _ anAccount .! !
-
-
-!CertificateOfDeposit methodsFor: 'printing' stamp: 'PGF 5/10/2018 21:01:44'!
-printDescription
-	^'Plazo fijo por ', value printString, ' durante ', numberOfDays printString , ' dias a una tna de ', (tna*100) printString, '%'. ! !
-
-
-!CertificateOfDeposit methodsFor: 'value' stamp: 'PGF 5/10/2018 20:58:47'!
+!CertificateOfDeposit methodsFor: 'as yet unclassified' stamp: 'PGF 5/10/2018 20:58:47'!
 modifyBalance: aBalance
 	^aBalance - value .! !
+
+!CertificateOfDeposit methodsFor: 'as yet unclassified' stamp: 'PGF 5/10/2018 21:01:44'!
+printDescription
+	^'Plazo fijo por ', value printString, ' durante ', numberOfDays printString , ' dias a una tna de ', (tna*100) printString, '%'. ! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
@@ -929,21 +927,6 @@ transferNet
 			(transaction isKindOf: Transfer) ifTrue: [transaction modifyBalance:balance for:self] ifFalse: [balance.].
 			].! !
 
-!ReceptiveAccount methodsFor: 'transactions' stamp: 'PGF 5/10/2018 21:30:44'!
-treeOfnamingAccountWith:aDictionary
-	|arbol|
-	arbol _ (OrderedCollection new).
-	arbol add:( aDictionary at:self).
-	^arbol.! !
-
-
-!ReceptiveAccount methodsFor: 'testing' stamp: 'PGF 5/10/2018 20:01:05'!
-accountSummary
-	^transactions collect: [:aTransaction | 
-		(aTransaction isKindOf: Transfer) 
-			ifTrue: [aTransaction printDescription:self] 
-			ifFalse: [aTransaction printDescription.]
-			].! !
 
 !ReceptiveAccount methodsFor: 'testing' stamp: 'HernanWilkinson 7/13/2011 18:37'!
 manages: anAccount
@@ -956,6 +939,23 @@ registers: aTtransaction
 
 	^ transactions includes: aTtransaction 
 ! !
+
+
+!ReceptiveAccount methodsFor: 'texting' stamp: 'PGF 5/10/2018 20:01:05'!
+accountSummary
+	^transactions collect: [:aTransaction | 
+		(aTransaction isKindOf: Transfer) 
+			ifTrue: [aTransaction printDescription:self] 
+			ifFalse: [aTransaction printDescription.]
+			].! !
+
+
+!ReceptiveAccount methodsFor: 'as yet unclassified' stamp: 'PGF 5/10/2018 21:30:44'!
+treeOfnamingAccountWith:aDictionary
+	|arbol|
+	arbol _ (OrderedCollection new).
+	arbol add:( aDictionary at:self).
+	^arbol.! !
 
 
 !classDefinition: #Transfer category: #'PortfolioTreePrinter-Ejercicio'!
