@@ -5,7 +5,7 @@ TestCase subclass: #TicTacToeTest
 	poolDictionaries: ''
 	category: 'TicTacToe-Ejercicio'!
 
-!TicTacToeTest methodsFor: 'as yet unclassified' stamp: 'PGF 5/28/2018 18:53:46'!
+!TicTacToeTest methodsFor: 'Testing' stamp: 'PGF 5/28/2018 18:53:46'!
 test01NewGameBoardIsEmpty
 
 	|game|
@@ -16,7 +16,7 @@ test01NewGameBoardIsEmpty
 	self assert: game Os isEmpty.
 	! !
 
-!TicTacToeTest methodsFor: 'as yet unclassified' stamp: 'PGF 5/28/2018 18:55:54'!
+!TicTacToeTest methodsFor: 'Testing' stamp: 'PGF 5/28/2018 18:55:54'!
 test02WhenXPlayOneMoveOnlyAreOneXOnTheBoardMarked
 	| game |
 	game _ TicTacToe new.
@@ -27,7 +27,7 @@ test02WhenXPlayOneMoveOnlyAreOneXOnTheBoardMarked
 	self assert: (game Xs includes: 1 @ 1).
 	self assert: game Os isEmpty.! !
 
-!TicTacToeTest methodsFor: 'as yet unclassified' stamp: 'PGF 5/28/2018 18:57:15'!
+!TicTacToeTest methodsFor: 'Testing' stamp: 'PGF 5/28/2018 18:57:15'!
 test03WhenXPlayAndThenPlayOTheraAreOnlyOneXAndOneOOnTheBoardMarked
 	| game |
 	game _ TicTacToe new.
@@ -42,7 +42,7 @@ test03WhenXPlayAndThenPlayOTheraAreOnlyOneXAndOneOOnTheBoardMarked
 		equals: game Os size.
 	self assert: (game Os includes: 2 @ 2).! !
 
-!TicTacToeTest methodsFor: 'as yet unclassified' stamp: 'GAA 5/29/2018 11:33:30'!
+!TicTacToeTest methodsFor: 'Testing' stamp: 'GAA 5/29/2018 11:33:30'!
 test04XCanNotPlayTwiceConsecutive
 	| game |
 	game _ TicTacToe new.
@@ -60,7 +60,7 @@ test04XCanNotPlayTwiceConsecutive
 			self assert: (game Xs includes: 1 @ 1).
 			self assert: game Os isEmpty ].! !
 
-!TicTacToeTest methodsFor: 'as yet unclassified' stamp: 'GAA 5/29/2018 11:33:12'!
+!TicTacToeTest methodsFor: 'Testing' stamp: 'GAA 5/29/2018 11:33:12'!
 test05OCanNotPlayTwiceConsecutive
 	| game |
 	game _ TicTacToe new.
@@ -82,7 +82,7 @@ test05OCanNotPlayTwiceConsecutive
 				equals: game Os size.
 			self assert: (game Os includes: 2 @ 2) ].! !
 
-!TicTacToeTest methodsFor: 'as yet unclassified' stamp: 'GAA 5/29/2018 11:40:25'!
+!TicTacToeTest methodsFor: 'Testing' stamp: 'GAA 5/29/2018 11:40:25'!
 test06XCanNotPlayInTheSamePositionAsItself
 	| game |
 	game _ TicTacToe new.
@@ -104,7 +104,7 @@ test06XCanNotPlayInTheSamePositionAsItself
 				equals: game Os size.
 			self assert: (game Os includes: 2 @ 2) ].! !
 
-!TicTacToeTest methodsFor: 'as yet unclassified' stamp: 'GAA 5/29/2018 11:41:09'!
+!TicTacToeTest methodsFor: 'Testing' stamp: 'GAA 5/29/2018 11:41:09'!
 test07XCanNotPlayInTheSamePositionAsO
 	| game |
 	game _ TicTacToe new.
@@ -126,7 +126,7 @@ test07XCanNotPlayInTheSamePositionAsO
 				equals: game Os size.
 			self assert: (game Os includes: 2 @ 2) ].! !
 
-!TicTacToeTest methodsFor: 'as yet unclassified' stamp: 'GAA 5/29/2018 11:41:44'!
+!TicTacToeTest methodsFor: 'Testing' stamp: 'GAA 5/29/2018 11:41:44'!
 test08OCanNotPlayInTheSamePotitionAsX
 	| game |
 	game _ TicTacToe new.
@@ -144,7 +144,7 @@ test08OCanNotPlayInTheSamePotitionAsX
 			self assert: (game Xs includes: 1 @ 1).
 			self assert: game Os isEmpty ].! !
 
-!TicTacToeTest methodsFor: 'as yet unclassified' stamp: 'GAA 5/29/2018 11:42:17'!
+!TicTacToeTest methodsFor: 'Testing' stamp: 'GAA 5/29/2018 11:42:17'!
 test09OCanNotPlayInSamePotitionAsItself
 	| game |
 	game _ TicTacToe new.
@@ -168,7 +168,7 @@ test09OCanNotPlayInSamePotitionAsItself
 				equals: game Os size.
 			self assert: (game Os includes: 2 @ 2) ].! !
 
-!TicTacToeTest methodsFor: 'as yet unclassified' stamp: 'GAA 5/29/2018 11:44:00'!
+!TicTacToeTest methodsFor: 'Testing' stamp: 'GAA 5/29/2018 11:44:00'!
 test10NobodyIsAWinnerInAUnfinishedGame
 	| game |
 	game _ TicTacToe new.
@@ -179,7 +179,7 @@ test10NobodyIsAWinnerInAUnfinishedGame
 	self deny: game hasPlayerOWon.
 	self deny: game hasPlayerXWon.! !
 
-!TicTacToeTest methodsFor: 'as yet unclassified' stamp: 'GAA 5/29/2018 12:43:52'!
+!TicTacToeTest methodsFor: 'Testing' stamp: 'GAA 5/29/2018 12:43:52'!
 test11XWonWithFirstRowCompleted
 	| game |
 	game _ TicTacToe new.
@@ -191,7 +191,7 @@ test11XWonWithFirstRowCompleted
 	self assert: game hasPlayerXWon.
 	self deny: game hasPlayerOWon.! !
 
-!TicTacToeTest methodsFor: 'as yet unclassified' stamp: 'GAA 5/29/2018 12:44:39'!
+!TicTacToeTest methodsFor: 'Testing' stamp: 'GAA 5/29/2018 12:44:39'!
 test12XWonWithSecondRowCompleted
 	| game |
 	game _ TicTacToe new.
@@ -203,7 +203,7 @@ test12XWonWithSecondRowCompleted
 	self assert: game hasPlayerXWon.
 	self deny: game hasPlayerOWon.! !
 
-!TicTacToeTest methodsFor: 'as yet unclassified' stamp: 'GAA 5/29/2018 12:44:59'!
+!TicTacToeTest methodsFor: 'Testing' stamp: 'GAA 5/29/2018 12:44:59'!
 test13XWonWithThirdRowCompleted
 	| game |
 	game _ TicTacToe new.
@@ -215,7 +215,7 @@ test13XWonWithThirdRowCompleted
 	self assert: game hasPlayerXWon.
 	self deny: game hasPlayerOWon.! !
 
-!TicTacToeTest methodsFor: 'as yet unclassified' stamp: 'GAA 5/29/2018 12:47:00'!
+!TicTacToeTest methodsFor: 'Testing' stamp: 'GAA 5/29/2018 12:47:00'!
 test14XWonWithFirstColumnCompleted
 	| game |
 	game _ TicTacToe new.
@@ -227,7 +227,7 @@ test14XWonWithFirstColumnCompleted
 	self assert: game hasPlayerXWon.
 	self deny: game hasPlayerOWon.! !
 
-!TicTacToeTest methodsFor: 'as yet unclassified' stamp: 'GAA 5/29/2018 12:47:57'!
+!TicTacToeTest methodsFor: 'Testing' stamp: 'GAA 5/29/2018 12:47:57'!
 test15XWonWithDownDiagonal
 	| game |
 	game _ TicTacToe new.
@@ -239,7 +239,7 @@ test15XWonWithDownDiagonal
 	self assert: game hasPlayerXWon.
 	self deny: game hasPlayerOWon.! !
 
-!TicTacToeTest methodsFor: 'as yet unclassified' stamp: 'GAA 5/29/2018 12:48:48'!
+!TicTacToeTest methodsFor: 'Testing' stamp: 'GAA 5/29/2018 12:48:48'!
 test16XWonWithUpDiagonal
 	| game |
 	game _ TicTacToe new.
@@ -251,7 +251,7 @@ test16XWonWithUpDiagonal
 	self assert: game hasPlayerXWon.
 	self deny: game hasPlayerOWon.! !
 
-!TicTacToeTest methodsFor: 'as yet unclassified' stamp: 'GAA 5/29/2018 12:49:26'!
+!TicTacToeTest methodsFor: 'Testing' stamp: 'GAA 5/29/2018 12:49:26'!
 test17OWonWithFirstRowCompleted
 	| game |
 	game _ TicTacToe new.
@@ -264,7 +264,7 @@ test17OWonWithFirstRowCompleted
 	self assert: game hasPlayerOWon.
 	self deny: game hasPlayerXWon.! !
 
-!TicTacToeTest methodsFor: 'as yet unclassified' stamp: 'GAA 5/29/2018 13:56:42'!
+!TicTacToeTest methodsFor: 'Testing' stamp: 'GAA 5/29/2018 13:56:42'!
 test18OCanNotPlayWhenGameIsOver
 	| game |
 	game _ TicTacToe new.
@@ -286,7 +286,7 @@ test18OCanNotPlayWhenGameIsOver
 			self assert: (game Os includes: 2 @ 1).
 			self assert: (game Os includes: 3 @ 1) ].! !
 
-!TicTacToeTest methodsFor: 'as yet unclassified' stamp: 'GAA 5/29/2018 13:57:03'!
+!TicTacToeTest methodsFor: 'Testing' stamp: 'GAA 5/29/2018 13:57:03'!
 test19XCanNotPlayWhenGameIsOver
 	| game |
 	game _ TicTacToe new.
@@ -310,7 +310,7 @@ test19XCanNotPlayWhenGameIsOver
 			self assert: (game Xs includes: 2 @ 1).
 			self assert: (game Xs includes: 3 @ 1) ].! !
 
-!TicTacToeTest methodsFor: 'as yet unclassified' stamp: 'GAA 5/29/2018 13:59:28'!
+!TicTacToeTest methodsFor: 'Testing' stamp: 'GAA 5/29/2018 13:59:28'!
 test20InTiedGameNobodyWinsAndGameIsOver
 	| game |
 	game _ TicTacToe new.
@@ -328,7 +328,7 @@ test20InTiedGameNobodyWinsAndGameIsOver
 	self deny: game hasPlayerOWon.
 	self assert: game isTied.! !
 
-!TicTacToeTest methodsFor: 'as yet unclassified' stamp: 'GAA 5/29/2018 14:00:03'!
+!TicTacToeTest methodsFor: 'Testing' stamp: 'GAA 5/29/2018 14:00:03'!
 test21IfXPlayerWonGameIsOver
 	| game |
 	game _ TicTacToe new.
@@ -354,27 +354,27 @@ Object subclass: #StateTicTacToe
 	poolDictionaries: ''
 	category: 'TicTacToe-Ejercicio'!
 
-!StateTicTacToe methodsFor: 'as yet unclassified' stamp: 'PGF 5/28/2018 21:35:30'!
+!StateTicTacToe methodsFor: 'accessing' stamp: 'PGF 5/28/2018 21:35:30'!
 hasCompletedColumn: positions
 	
 	^ (1 to: 3) anySatisfy: [ :y | (positions count: [ :position | position y = y ]) = 3 ]! !
 
-!StateTicTacToe methodsFor: 'as yet unclassified' stamp: 'PGF 5/28/2018 21:35:43'!
+!StateTicTacToe methodsFor: 'accessing' stamp: 'PGF 5/28/2018 21:35:43'!
 hasCompletedRow: positions
 
 	^ (1 to: 3) anySatisfy: [ :x | (positions count: [ :posicion | posicion x = x ]) = 3 ]! !
 
-!StateTicTacToe methodsFor: 'as yet unclassified' stamp: 'PGF 5/28/2018 21:36:07'!
+!StateTicTacToe methodsFor: 'accessing' stamp: 'PGF 5/28/2018 21:36:07'!
 hasDownDiagonal: positions
 
 	^(1 to: 3) allSatisfy: [ :n | positions includes: n@n ]! !
 
-!StateTicTacToe methodsFor: 'as yet unclassified' stamp: 'PGF 5/28/2018 21:36:20'!
+!StateTicTacToe methodsFor: 'accessing' stamp: 'PGF 5/28/2018 21:36:20'!
 hasUpDiagonal: positions
 
 	^(1 to: 3) allSatisfy: [ :n | positions includes: n@(4-n) ]! !
 
-!StateTicTacToe methodsFor: 'as yet unclassified' stamp: 'PGF 5/28/2018 21:35:16'!
+!StateTicTacToe methodsFor: 'accessing' stamp: 'PGF 5/28/2018 21:35:16'!
 hasWin: positions
 
 	^(self hasCompletedRow: positions)
@@ -383,15 +383,15 @@ hasWin: positions
 					or: [(self hasUpDiagonal: positions)]]]
 ! !
 
-!StateTicTacToe methodsFor: 'as yet unclassified' stamp: 'PGF 5/28/2018 21:18:46'!
+!StateTicTacToe methodsFor: 'accessing' stamp: 'PGF 5/28/2018 21:18:46'!
 markWithOAt: aPosition inGame: aGame
 	^self subclassResponsibility.! !
 
-!StateTicTacToe methodsFor: 'as yet unclassified' stamp: 'PGF 5/28/2018 21:18:50'!
+!StateTicTacToe methodsFor: 'accessing' stamp: 'PGF 5/28/2018 21:18:50'!
 markWithXAt: aPosition inGame: aGame
 	^self subclassResponsibility.! !
 
-!StateTicTacToe methodsFor: 'as yet unclassified' stamp: 'PGF 5/28/2018 21:33:29'!
+!StateTicTacToe methodsFor: 'accessing' stamp: 'PGF 5/28/2018 21:33:29'!
 nextStateFor: positions
 	^self subclassResponsibility.! !
 
@@ -403,15 +403,15 @@ StateTicTacToe subclass: #StateTied
 	poolDictionaries: ''
 	category: 'TicTacToe-Ejercicio'!
 
-!StateTied methodsFor: 'as yet unclassified' stamp: 'PGF 5/28/2018 21:14:28'!
+!StateTied methodsFor: 'accessing' stamp: 'PGF 5/28/2018 21:14:28'!
 markWithOAt: aPosition inGame: aGame
 	aGame gameAlreadyOver.! !
 
-!StateTied methodsFor: 'as yet unclassified' stamp: 'PGF 5/28/2018 21:14:28'!
+!StateTied methodsFor: 'accessing' stamp: 'PGF 5/28/2018 21:14:28'!
 markWithXAt: aPosition inGame: aGame
 	aGame gameAlreadyOver.! !
 
-!StateTied methodsFor: 'as yet unclassified' stamp: 'PGF 5/28/2018 21:33:01'!
+!StateTied methodsFor: 'accessing' stamp: 'PGF 5/28/2018 21:33:01'!
 nextStateFor: positions! !
 
 
@@ -422,15 +422,15 @@ StateTicTacToe subclass: #StateTurnO
 	poolDictionaries: ''
 	category: 'TicTacToe-Ejercicio'!
 
-!StateTurnO methodsFor: 'as yet unclassified' stamp: 'PGF 5/28/2018 20:52:45'!
+!StateTurnO methodsFor: 'accessing' stamp: 'PGF 5/28/2018 20:52:45'!
 markWithOAt: aPosition inGame: aGame
 	aGame inTurnOmarkWithOAt: aPosition.! !
 
-!StateTurnO methodsFor: 'as yet unclassified' stamp: 'PGF 5/28/2018 20:52:57'!
+!StateTurnO methodsFor: 'accessing' stamp: 'PGF 5/28/2018 20:52:57'!
 markWithXAt: aPosition inGame: aGame
 	aGame inTurnOmarkWithXAt: aPosition.! !
 
-!StateTurnO methodsFor: 'as yet unclassified' stamp: 'PGF 5/28/2018 21:32:40'!
+!StateTurnO methodsFor: 'accessing' stamp: 'PGF 5/28/2018 21:32:40'!
 nextStateFor: positions
 	(self hasWin: positions) ifTrue: [ ^StateWinnerO new. ].
 	^StateTurnX new.! !
@@ -443,15 +443,15 @@ StateTicTacToe subclass: #StateTurnX
 	poolDictionaries: ''
 	category: 'TicTacToe-Ejercicio'!
 
-!StateTurnX methodsFor: 'as yet unclassified' stamp: 'PGF 5/28/2018 20:53:08'!
+!StateTurnX methodsFor: 'accessing' stamp: 'PGF 5/28/2018 20:53:08'!
 markWithOAt: aPosition inGame: aGame
 	aGame inTurnXmarkWithOAt: aPosition.! !
 
-!StateTurnX methodsFor: 'as yet unclassified' stamp: 'PGF 5/28/2018 20:53:27'!
+!StateTurnX methodsFor: 'accessing' stamp: 'PGF 5/28/2018 20:53:27'!
 markWithXAt: aPosition inGame: aGame
 	aGame inTurnXmarkWithXAt: aPosition.! !
 
-!StateTurnX methodsFor: 'as yet unclassified' stamp: 'PGF 5/28/2018 21:32:13'!
+!StateTurnX methodsFor: 'accessing' stamp: 'PGF 5/28/2018 21:32:13'!
 nextStateFor: positions
 	(self hasWin: positions) ifTrue: [ ^StateWinnerX new. ].
 	(positions size = 5) ifTrue: [ ^StateTied new. ].
@@ -465,15 +465,15 @@ StateTicTacToe subclass: #StateWinnerO
 	poolDictionaries: ''
 	category: 'TicTacToe-Ejercicio'!
 
-!StateWinnerO methodsFor: 'as yet unclassified' stamp: 'PGF 5/28/2018 21:14:28'!
+!StateWinnerO methodsFor: 'accessing' stamp: 'PGF 5/28/2018 21:14:28'!
 markWithOAt: aPosition inGame: aGame
 	aGame gameAlreadyOver.! !
 
-!StateWinnerO methodsFor: 'as yet unclassified' stamp: 'PGF 5/28/2018 21:14:28'!
+!StateWinnerO methodsFor: 'accessing' stamp: 'PGF 5/28/2018 21:14:28'!
 markWithXAt: aPosition inGame: aGame
 	aGame gameAlreadyOver.! !
 
-!StateWinnerO methodsFor: 'as yet unclassified' stamp: 'PGF 5/28/2018 21:32:53'!
+!StateWinnerO methodsFor: 'accessing' stamp: 'PGF 5/28/2018 21:32:53'!
 nextStateFor: positions! !
 
 
@@ -484,15 +484,15 @@ StateTicTacToe subclass: #StateWinnerX
 	poolDictionaries: ''
 	category: 'TicTacToe-Ejercicio'!
 
-!StateWinnerX methodsFor: 'as yet unclassified' stamp: 'PGF 5/28/2018 21:14:28'!
+!StateWinnerX methodsFor: 'accessing' stamp: 'PGF 5/28/2018 21:14:28'!
 markWithOAt: aPosition inGame: aGame
 	aGame gameAlreadyOver.! !
 
-!StateWinnerX methodsFor: 'as yet unclassified' stamp: 'PGF 5/28/2018 21:14:28'!
+!StateWinnerX methodsFor: 'accessing' stamp: 'PGF 5/28/2018 21:14:28'!
 markWithXAt: aPosition inGame: aGame
 	aGame gameAlreadyOver.! !
 
-!StateWinnerX methodsFor: 'as yet unclassified' stamp: 'PGF 5/28/2018 21:30:46'!
+!StateWinnerX methodsFor: 'accessing' stamp: 'PGF 5/28/2018 21:30:46'!
 nextStateFor: positions
 ! !
 
@@ -504,45 +504,77 @@ Object subclass: #TicTacToe
 	poolDictionaries: ''
 	category: 'TicTacToe-Ejercicio'!
 
-!TicTacToe methodsFor: 'as yet unclassified' stamp: 'jg 5/22/2018 10:01:34'!
+!TicTacToe methodsFor: 'accessing' stamp: 'jg 5/22/2018 10:01:34'!
 Os
 
 	^os copy.! !
 
-!TicTacToe methodsFor: 'as yet unclassified' stamp: 'jg 5/22/2018 10:01:25'!
+!TicTacToe methodsFor: 'accessing' stamp: 'jg 5/22/2018 10:01:25'!
 Xs
 
 	^xs copy.! !
 
-!TicTacToe methodsFor: 'as yet unclassified' stamp: 'PGF 5/28/2018 21:14:28'!
-gameAlreadyOver
-	self error: self class canNotPlayWhenGameIsOverErrorMessage.! !
-
-!TicTacToe methodsFor: 'as yet unclassified' stamp: 'PGF 5/28/2018 21:05:16'!
+!TicTacToe methodsFor: 'accessing' stamp: 'PGF 5/28/2018 21:05:16'!
 hasPlayerOWon
 	^ state isKindOf: StateWinnerO.! !
 
-!TicTacToe methodsFor: 'as yet unclassified' stamp: 'PGF 5/28/2018 21:05:32'!
+!TicTacToe methodsFor: 'accessing' stamp: 'PGF 5/28/2018 21:05:32'!
 hasPlayerXWon
 	^ state isKindOf: StateWinnerX.! !
 
-!TicTacToe methodsFor: 'as yet unclassified' stamp: 'PGF 5/28/2018 20:08:34'!
+!TicTacToe methodsFor: 'accessing' stamp: 'PGF 5/28/2018 20:08:34'!
 inTurnOmarkWithOAt: aPosition
 	! !
 
-!TicTacToe methodsFor: 'as yet unclassified' stamp: 'PGF 5/28/2018 19:54:44'!
+!TicTacToe methodsFor: 'accessing' stamp: 'PGF 5/28/2018 19:54:44'!
 inTurnOmarkWithXAt: aPosition
 	^self error: self class notXTurnErrorMessage! !
 
-!TicTacToe methodsFor: 'as yet unclassified' stamp: 'PGF 5/28/2018 19:54:09'!
+!TicTacToe methodsFor: 'accessing' stamp: 'PGF 5/28/2018 19:54:09'!
 inTurnXmarkWithOAt: aPosition
 	^self error: self class notOTurnErrorMessage! !
 
-!TicTacToe methodsFor: 'as yet unclassified' stamp: 'PGF 5/28/2018 20:08:58'!
+!TicTacToe methodsFor: 'accessing' stamp: 'PGF 5/28/2018 20:08:58'!
 inTurnXmarkWithXAt: aPosition
 	! !
 
-!TicTacToe methodsFor: 'as yet unclassified' stamp: 'PGF 5/28/2018 20:57:48'!
+!TicTacToe methodsFor: 'accessing' stamp: 'PGF 5/28/2018 18:51:47'!
+isOver
+	^ self hasPlayerXWon or: [
+		self hasPlayerOWon or: [ self isTied ]].! !
+
+!TicTacToe methodsFor: 'accessing' stamp: 'PGF 5/28/2018 21:05:58'!
+isPlayingO
+	^state isKindOf: StateTurnO.! !
+
+!TicTacToe methodsFor: 'accessing' stamp: 'PGF 5/28/2018 21:06:03'!
+isPlayingX
+	^state isKindOf: StateTurnX.! !
+
+!TicTacToe methodsFor: 'accessing' stamp: 'GAA 5/29/2018 11:26:46'!
+isTied
+	^state isKindOf: StateTied.
+! !
+
+!TicTacToe methodsFor: 'accessing' stamp: 'PGF 5/28/2018 21:54:44'!
+markAt: aPosition on: positions 
+	((xs includes: aPosition) or: [os includes:aPosition.])  ifTrue: [ self error: self class positionTakenErrorMessage ].
+	positions add: aPosition.
+	
+	state _ state nextStateFor: positions.! !
+
+!TicTacToe methodsFor: 'accessing' stamp: 'PGF 5/28/2018 21:55:09'!
+markWithOAt: aPosition
+	state markWithOAt: aPosition inGame: self.
+	self markAt: aPosition on: os.! !
+
+!TicTacToe methodsFor: 'accessing' stamp: 'PGF 5/28/2018 21:55:21'!
+markWithXAt: aPosition
+	state markWithXAt: aPosition inGame: self.
+	self markAt: aPosition on: xs.! !
+
+
+!TicTacToe methodsFor: 'initialization' stamp: 'PGF 5/28/2018 20:57:48'!
 initialize
 	
 	xs _ Set new.
@@ -550,40 +582,10 @@ initialize
 
 	state _ StateTurnX new.! !
 
-!TicTacToe methodsFor: 'as yet unclassified' stamp: 'PGF 5/28/2018 18:51:47'!
-isOver
-	^ self hasPlayerXWon or: [
-		self hasPlayerOWon or: [ self isTied ]].! !
 
-!TicTacToe methodsFor: 'as yet unclassified' stamp: 'PGF 5/28/2018 21:05:58'!
-isPlayingO
-	^state isKindOf: StateTurnO.! !
-
-!TicTacToe methodsFor: 'as yet unclassified' stamp: 'PGF 5/28/2018 21:06:03'!
-isPlayingX
-	^state isKindOf: StateTurnX.! !
-
-!TicTacToe methodsFor: 'as yet unclassified' stamp: 'GAA 5/29/2018 11:26:46'!
-isTied
-	^state isKindOf: StateTied.
-! !
-
-!TicTacToe methodsFor: 'as yet unclassified' stamp: 'PGF 5/28/2018 21:54:44'!
-markAt: aPosition on: positions 
-	((xs includes: aPosition) or: [os includes:aPosition.])  ifTrue: [ self error: self class positionTakenErrorMessage ].
-	positions add: aPosition.
-	
-	state _ state nextStateFor: positions.! !
-
-!TicTacToe methodsFor: 'as yet unclassified' stamp: 'PGF 5/28/2018 21:55:09'!
-markWithOAt: aPosition
-	state markWithOAt: aPosition inGame: self.
-	self markAt: aPosition on: os.! !
-
-!TicTacToe methodsFor: 'as yet unclassified' stamp: 'PGF 5/28/2018 21:55:21'!
-markWithXAt: aPosition
-	state markWithXAt: aPosition inGame: self.
-	self markAt: aPosition on: xs.! !
+!TicTacToe methodsFor: 'error handling' stamp: 'PGF 5/28/2018 21:14:28'!
+gameAlreadyOver
+	self error: self class canNotPlayWhenGameIsOverErrorMessage.! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
