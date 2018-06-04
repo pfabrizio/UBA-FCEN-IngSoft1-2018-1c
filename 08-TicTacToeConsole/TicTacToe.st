@@ -1,308 +1,304 @@
 !classDefinition: #TicTacToeObserverTest category: #TicTacToe!
 TestCase subclass: #TicTacToeObserverTest
-	instanceVariableNames: ''
+	instanceVariableNames: 'game console viewer viewBoard'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'TicTacToe'!
 
-!TicTacToeObserverTest methodsFor: 'Testing' stamp: 'GAA 6/4/2018 12:39:29'!
-test01NewGameConsoleEmpty
-	| console game |
+!TicTacToeObserverTest methodsFor: 'testing' stamp: 'PGF 6/4/2018 14:43:59'!
+test01OnNewGameConsoleLogIsEmpty
 	game _ TicTacToe new.
 	console _ TicTacToeConsole new.
 	game addObserver: console.
+	
+     self assertConsoleIsEmpty.! !
+
+!TicTacToeObserverTest methodsFor: 'testing' stamp: 'PGF 6/4/2018 14:58:14'!
+test02OnOnlyMarkXConsoleHasOnlyThatMark
+	game _ TicTacToe new.
+	console _ TicTacToeConsole new.
+	game addObserver: console.
+	
+	game markAll: { 1@1. }.
+	
+	self assertMarkXOn: 1@1 at: 1.
+     self assertEstadoJugandoOAt: 2.
+	self assertConsoleSize: 2.! !
+
+!TicTacToeObserverTest methodsFor: 'testing' stamp: 'PGF 6/4/2018 15:18:25'!
+test03CheckConsoleLogAfterTwoMarks
+	game _ TicTacToe new.
+	console _ TicTacToeConsole new.
+	game addObserver: console.
+	game markAll: {1 @ 1. 2 @ 2}.
+	self assertMarkXOn: 1 @ 1	at: 1.
+	self assertEstadoJugandoOAt: 2.
+	self assertMarkOOn: 2 @ 2 at: 3.
+	self assertEstadoJugandoXAt: 4.
+	self assertConsoleSize: 4.! !
+
+!TicTacToeObserverTest methodsFor: 'testing' stamp: 'PGF 6/4/2018 15:19:07'!
+test04ConsoleLogForPlayerXWinTheGame
+	game _ TicTacToe new.
+	console _ TicTacToeConsole new.
+	game addObserver: console.
+	game markAll: {2 @ 2. 1 @ 1. 1 @ 3. 1 @ 2. 3 @ 1}.
+	self assertMarkXOn: 2 @ 2 at: 1.
+	self assertEstadoJugandoOAt: 2.
+	self assertMarkOOn: 1 @ 1 	at: 3.
+	self assertEstadoJugandoXAt: 4.
+	self assertMarkXOn: 1 @ 3 at: 5.
+	self assertEstadoJugandoOAt: 6.
+	self assertMarkOOn: 1 @ 2 at: 7.
+	self assertEstadoJugandoXAt: 8.
+	self assertMarkXOn: 3 @ 1	at: 9.
+	self assertPlayerXWinAt: 10.
+	self assertConsoleSize: 10.! !
+
+!TicTacToeObserverTest methodsFor: 'testing' stamp: 'PGF 6/4/2018 15:23:02'!
+test05ConsoleLogForPlayerOWinTheGame
+	game _ TicTacToe new.
+	console _ TicTacToeConsole new.
+	game addObserver: console.
+
+	game markAll: { 2@2. 1@1. 3@3. 1@2. 3@1. 1@3. }.
+	
+	self assertMarkXOn: 2@2 at: 1.
+	self assertEstadoJugandoOAt: 2.
+	self assertMarkOOn: 1@1 	at: 3.
+	self assertEstadoJugandoXAt: 4.
+	self assertMarkXOn: 3@3 at: 5.
+	self assertEstadoJugandoOAt: 6.
+	self assertMarkOOn: 1@2 at: 7.
+	self assertEstadoJugandoXAt: 8.
+	self assertMarkXOn: 3@1	at: 9.
+	self assertEstadoJugandoOAt: 10.
+	self assertMarkOOn: 1@3 at: 11.
+	self assertPlayerOWinAt: 12.
+	self assertConsoleSize: 12.! !
+
+!TicTacToeObserverTest methodsFor: 'testing' stamp: 'PGF 6/4/2018 15:37:37'!
+test06ConsoleLogForTiedGame
+
+	game _ TicTacToe new.
+	console _ TicTacToeConsole new.
+	game addObserver: console.
+	
+	game markAll: { 1@2. 1@1. 3@3. 2@2. 3@1. 2@3. 2@1. 3@2. 1@3. }.
+	
+	self assertMarkXOn: 1@2 at: 1.
+	self assertEstadoJugandoOAt: 2.
+	self assertMarkOOn: 1@1 at: 3.
+	self assertEstadoJugandoXAt: 4.
+	self assertEstadoEmpateAt: (console log size).! !
+
+!TicTacToeObserverTest methodsFor: 'testing' stamp: 'PGF 6/4/2018 15:56:17'!
+test07OnNewGameViewerIsNewBoard
+	game _ TicTacToe new.
+	viewer _ TicTacToeViewer new.
+	game addObserver: viewer.
+	viewBoard _ viewer newBoard.
+	viewBoard add: 'Estado: Jugando X'.
+	self assert: viewer show = viewBoard.! !
+
+!TicTacToeObserverTest methodsFor: 'testing' stamp: 'PGF 6/4/2018 15:58:35'!
+test08OnOnlyMarkXViewBoardHasOnlyThatX
+	game _ TicTacToe new.
+	viewer _ TicTacToeViewer new.
+	game addObserver: viewer.
+	viewBoard _ viewer newBoard.
+	(viewBoard at: 3)
+		at: 3
+		put: $X.
+	viewBoard add: 'Estado: Jugando O'.
+	game markAll:
+		{2 @ 2}.
+	self assert: viewer show = viewBoard.! !
+
+!TicTacToeObserverTest methodsFor: 'testing' stamp: 'PGF 6/4/2018 15:59:23'!
+test09CheckViewerAfterTwoMarks
+	game _ TicTacToe new.
+	viewer _ TicTacToeViewer new.
+	game addObserver: viewer.
+	viewBoard _ viewer newBoard.
+	(viewBoard at: 1)
+		at: 1
+		put: $X.
+	(viewBoard at: 3)
+		at: 3
+		put: $O.
+	viewBoard add: 'Estado: Jugando X'.
+	game markAll:
+		{1 @ 1. 2 @ 2}.
+	self assert: viewer show = viewBoard.! !
+
+!TicTacToeObserverTest methodsFor: 'testing' stamp: 'PGF 6/4/2018 16:00:47'!
+test10ViewerBoardForPlayerXWinTheGame
+	game _ TicTacToe new.
+	viewer _ TicTacToeViewer new.
+	game addObserver: viewer.
+	viewBoard _ viewer newBoard.
+	(viewBoard at: 3)
+		at: 3
+		put: $X.
+	(viewBoard at: 1)
+		at: 1
+		put: $O.
+	(viewBoard at: 1)
+		at: 5
+		put: $X.
+	(viewBoard at: 1)
+		at: 3
+		put: $O.
+	(viewBoard at: 5)
+		at: 1
+		put: $X.
+	viewBoard add: 'Juego terminado - Ganó X!!'.
+	game markAll:
+		{2 @ 2. 1 @ 1. 1 @ 3. 1 @ 2. 3 @ 1}.
+	self assert: viewer show = viewBoard.! !
+
+!TicTacToeObserverTest methodsFor: 'testing' stamp: 'PGF 6/4/2018 16:01:18'!
+test11ViewerBoardForPlayerOWinTheGame
+	game _ TicTacToe new.
+	viewer _ TicTacToeViewer new.
+	game addObserver: viewer.
+	viewBoard _ viewer newBoard.
+	(viewBoard at: 3)
+		at: 3
+		put: $X.
+	(viewBoard at: 1)
+		at: 1
+		put: $O.
+	(viewBoard at: 5)
+		at: 5
+		put: $X.
+	(viewBoard at: 1)
+		at: 3
+		put: $O.
+	(viewBoard at: 5)
+		at: 1
+		put: $X.
+	(viewBoard at: 1)
+		at: 5
+		put: $O.
+	viewBoard add: 'Juego terminado - Ganó O!!'.
+	game markAll:
+		{2 @ 2. 1 @ 1. 3 @ 3. 1 @ 2. 3 @ 1. 1 @ 3}.
+	self assert: viewer show = viewBoard.! !
+
+!TicTacToeObserverTest methodsFor: 'testing' stamp: 'PGF 6/4/2018 16:01:42'!
+test12ViewerBoardForTiedGame
+	game _ TicTacToe new.
+	viewer _ TicTacToeViewer new.
+	game addObserver: viewer.
+	viewBoard _ viewer newBoard.
+	(viewBoard at: 1)
+		at: 3
+		put: $X.
+	(viewBoard at: 1)
+		at: 1
+		put: $O.
+	(viewBoard at: 5)
+		at: 5
+		put: $X.
+	(viewBoard at: 3)
+		at: 3
+		put: $O.
+	(viewBoard at: 5)
+		at: 1
+		put: $X.
+	(viewBoard at: 3)
+		at: 5
+		put: $O.
+	(viewBoard at: 3)
+		at: 1
+		put: $X.
+	(viewBoard at: 5)
+		at: 3
+		put: $O.
+	(viewBoard at: 1)
+		at: 5
+		put: $X.
+	viewBoard add: 'Juego terminado - Empate!!'.
+	game markAll:
+		{1 @ 2. 1 @ 1. 3 @ 3. 2 @ 2. 3 @ 1. 2 @ 3. 2 @ 1. 3 @ 2. 1 @ 3}.
+	self assert: viewer show = viewBoard.! !
+
+!TicTacToeObserverTest methodsFor: 'testing' stamp: 'PGF 6/4/2018 16:02:52'!
+test13ViewerAndConsoleInParallelForPalyerXWinTheGame
+	game _ TicTacToe new.
+	viewer _ TicTacToeViewer new.
+	game addObserver: viewer.
+	console _ TicTacToeConsole new.
+	game addObserver: console.
+	viewBoard _ viewer newBoard.
+	(viewBoard at: 3)
+		at: 3
+		put: $X.
+	(viewBoard at: 1)
+		at: 1
+		put: $O.
+	(viewBoard at: 1)
+		at: 5
+		put: $X.
+	(viewBoard at: 1)
+		at: 3
+		put: $O.
+	(viewBoard at: 5)
+		at: 1
+		put: $X.
+	viewBoard add: 'Juego terminado - Ganó X!!'.
+	game markAll:
+		{2 @ 2. 1 @ 1. 1 @ 3. 1 @ 2. 3 @ 1}.
+	self assert: viewer show = viewBoard.
+	self
+		assertMarkXOn: 2 @ 2
+		at: 1.
+	self assertEstadoJugandoOAt: 2.
+	self
+		assertMarkOOn: 1 @ 1
+		at: 3.
+	self assertEstadoJugandoXAt: 4.
+	self assertPlayerXWinAt: 10.
+	self assertConsoleSize: 10.! !
+
+
+!TicTacToeObserverTest methodsFor: 'assertions' stamp: 'PGF 6/4/2018 14:42:02'!
+assertConsoleIsEmpty
 	self assert: console log isEmpty.! !
 
-!TicTacToeObserverTest methodsFor: 'Testing' stamp: 'GAA 6/4/2018 12:44:18'!
-test02ConsoleLogsThatXMarksAndIsOTurn
-	| console game |
-	game _ TicTacToe new.
-	console _ TicTacToeConsole new.
-	game addObserver: console.
-	game markWithXAt: 1 @ 1.
-	self assert: (console log at: 1) = 'X marcó en 1@1'.
-	self assert: (console log at: 2) = 'Estado: Jugando O'.
-	self assert: console log size = 2.! !
+!TicTacToeObserverTest methodsFor: 'assertions' stamp: 'PGF 6/4/2018 14:48:43'!
+assertConsoleSize: size
+	self assert: console log size = size.! !
 
-!TicTacToeObserverTest methodsFor: 'Testing' stamp: 'GAA 6/4/2018 12:45:08'!
-test03ConsoleLogsThatXThenOMarksAndIsXTurn
-	| console game |
-	game _ TicTacToe new.
-	console _ TicTacToeConsole new.
-	game addObserver: console.
-	game markWithXAt: 1 @ 1.
-	game markWithOAt: 2 @ 2.
-	self assert: (console log at: 1) = 'X marcó en 1@1'.
-	self assert: (console log at: 2) = 'Estado: Jugando O'.
-	self assert: (console log at: 3) = 'O marcó en 2@2'.
-	self assert: (console log at: 4) = 'Estado: Jugando X'.
-	self assert: console log size = 4.! !
+!TicTacToeObserverTest methodsFor: 'assertions' stamp: 'PGF 6/4/2018 15:34:13'!
+assertEstadoEmpateAt: index
+	self assert: ((console log at: index) = 'Juego terminado - Empate!!') .! !
 
-!TicTacToeObserverTest methodsFor: 'Testing' stamp: 'GAA 6/4/2018 12:46:13'!
-test04ConsoleLogsXWinningPlayAndAnnounceIt
-	| console game |
-	game _ TicTacToe new.
-	console _ TicTacToeConsole new.
-	game addObserver: console.
-	game markWithXAt: 2 @ 2.
-	game markWithOAt: 1 @ 1.
-	game markWithXAt: 1 @ 3.
-	game markWithOAt: 1 @ 2.
-	game markWithXAt: 3 @ 1.
-	self assert: (console log at: 1) = 'X marcó en 2@2'.
-	self assert: (console log at: 2) = 'Estado: Jugando O'.
-	self assert: (console log at: 3) = 'O marcó en 1@1'.
-	self assert: (console log at: 4) = 'Estado: Jugando X'.
-	self assert: (console log at: 5) = 'X marcó en 1@3'.
-	self assert: (console log at: 6) = 'Estado: Jugando O'.
-	self assert: (console log at: 7) = 'O marcó en 1@2'.
-	self assert: (console log at: 8) = 'Estado: Jugando X'.
-	self assert: (console log at: 9) = 'X marcó en 3@1'.
-	self assert: (console log at: 10) = 'Juego terminado - Ganó X!!'.
-	self assert: console log size = 10.! !
+!TicTacToeObserverTest methodsFor: 'assertions' stamp: 'PGF 6/4/2018 14:57:40'!
+assertEstadoJugandoOAt: index
+	self assert: ((console log at: index) = 'Estado: Jugando O') .! !
 
-!TicTacToeObserverTest methodsFor: 'Testing' stamp: 'GAA 6/4/2018 12:46:50'!
-test05ConsoleLogsOWinningPlayAndAnnaounceIt
-	| console game |
-	game _ TicTacToe new.
-	console _ TicTacToeConsole new.
-	game addObserver: console.
-	game markWithXAt: 2 @ 2.
-	game markWithOAt: 1 @ 1.
-	game markWithXAt: 3 @ 3.
-	game markWithOAt: 1 @ 2.
-	game markWithXAt: 3 @ 1.
-	game markWithOAt: 1 @ 3.
-	self assert: (console log at: 1) = 'X marcó en 2@2'.
-	self assert: (console log at: 2) = 'Estado: Jugando O'.
-	self assert: (console log at: 3) = 'O marcó en 1@1'.
-	self assert: (console log at: 4) = 'Estado: Jugando X'.
-	self assert: (console log at: 5) = 'X marcó en 3@3'.
-	self assert: (console log at: 6) = 'Estado: Jugando O'.
-	self assert: (console log at: 7) = 'O marcó en 1@2'.
-	self assert: (console log at: 8) = 'Estado: Jugando X'.
-	self assert: (console log at: 9) = 'X marcó en 3@1'.
-	self assert: (console log at: 10) = 'Estado: Jugando O'.
-	self assert: (console log at: 11) = 'O marcó en 1@3'.
-	self assert: (console log at: 12) = 'Juego terminado - Ganó O!!'.
-	self assert: console log size = 12.! !
+!TicTacToeObserverTest methodsFor: 'assertions' stamp: 'PGF 6/4/2018 14:57:49'!
+assertEstadoJugandoXAt: index
+	self assert: ((console log at: index) = 'Estado: Jugando X') .! !
 
-!TicTacToeObserverTest methodsFor: 'Testing' stamp: 'GAA 6/4/2018 12:47:27'!
-test06ConsoleLogsDrawPlayAndAnnounceIt
-	| console game logSize |
-	game _ TicTacToe new.
-	console _ TicTacToeConsole new.
-	game addObserver: console.
-	game markWithXAt: 1 @ 2.
-	game markWithOAt: 1 @ 1.
-	game markWithXAt: 3 @ 3.
-	game markWithOAt: 2 @ 2.
-	game markWithXAt: 3 @ 1.
-	game markWithOAt: 2 @ 3.
-	game markWithXAt: 2 @ 1.
-	game markWithOAt: 3 @ 2.
-	game markWithXAt: 1 @ 3.
-	self assert: (console log at: 1) = 'X marcó en 1@2'.
-	self assert: (console log at: 2) = 'Estado: Jugando O'.
-	self assert: (console log at: 3) = 'O marcó en 1@1'.
-	self assert: (console log at: 4) = 'Estado: Jugando X'.
-	logSize _ console log size.
-	self assert: (console log at: logSize) = 'Juego terminado - Empate!!'.! !
+!TicTacToeObserverTest methodsFor: 'assertions' stamp: 'PGF 6/4/2018 14:56:21'!
+assertMarkOOn: aPosition at: index
+	self assert: ((console log at: index) = ('O marcó en ', aPosition printString)) .! !
 
-!TicTacToeObserverTest methodsFor: 'Testing' stamp: 'GAA 6/4/2018 12:52:57'!
-test07NewGameViewerBoardEmptyStatePlayingX
-	| viewer game viewNewGame |
-	game _ TicTacToe new.
-	viewer _ TicTacToeViewer new.
-	game addObserver: viewer.
-	viewNewGame _ viewer newBoard.
-	viewNewGame add: 'Estado: Jugando X'.
-	self assert: viewer show = viewNewGame.! !
+!TicTacToeObserverTest methodsFor: 'assertions' stamp: 'PGF 6/4/2018 14:55:28'!
+assertMarkXOn: aPosition at: index
+	self assert: ((console log at: index) = ('X marcó en ', aPosition printString)) .! !
 
-!TicTacToeObserverTest methodsFor: 'Testing' stamp: 'GAA 6/4/2018 13:55:09'!
-test08XMarkInBoardCenterONextTurn
-	| viewer game viewNewGame |
-	game _ TicTacToe new.
-	viewer _ TicTacToeViewer new.
-	game addObserver: viewer.
-	viewNewGame _ viewer newBoard.
-	(viewNewGame at: 3)
-		at: 3
-		put: $X.
-	viewNewGame add: 'Estado: Jugando O'.
-	game markWithXAt: 2 @ 2.
-	self assert: viewer show = viewNewGame.! !
+!TicTacToeObserverTest methodsFor: 'assertions' stamp: 'PGF 6/4/2018 15:11:34'!
+assertPlayerOWinAt: index
+	self assert: ((console log at: index) = 'Juego terminado - Ganó O!!') .! !
 
-!TicTacToeObserverTest methodsFor: 'Testing' stamp: 'GAA 6/4/2018 13:56:31'!
-test09XInUpperLeftOInCenterOfTheBoardXNextTurn
-	| viewer game viewNewGame |
-	game _ TicTacToe new.
-	viewer _ TicTacToeViewer new.
-	game addObserver: viewer.
-	viewNewGame _ viewer newBoard.
-	(viewNewGame at: 1)
-		at: 1
-		put: $X.
-	(viewNewGame at: 3)
-		at: 3
-		put: $O.
-	viewNewGame add: 'Estado: Jugando X'.
-	game markWithXAt: 1 @ 1.
-	game markWithOAt: 2 @ 2.
-	self assert: viewer show = viewNewGame.! !
-
-!TicTacToeObserverTest methodsFor: 'Testing' stamp: 'GAA 6/4/2018 13:57:34'!
-test10XWinningWithDownDiagonalInBoard
-	| viewer game viewNewGame |
-	game _ TicTacToe new.
-	viewer _ TicTacToeViewer new.
-	game addObserver: viewer.
-	viewNewGame _ viewer newBoard.
-	(viewNewGame at: 3)
-		at: 3
-		put: $X.
-	(viewNewGame at: 1)
-		at: 1
-		put: $O.
-	(viewNewGame at: 1)
-		at: 5
-		put: $X.
-	(viewNewGame at: 1)
-		at: 3
-		put: $O.
-	(viewNewGame at: 5)
-		at: 1
-		put: $X.
-	viewNewGame add: 'Juego terminado - Ganó X!!'.
-	game markWithXAt: 2 @ 2.
-	game markWithOAt: 1 @ 1.
-	game markWithXAt: 1 @ 3.
-	game markWithOAt: 1 @ 2.
-	game markWithXAt: 3 @ 1.
-	self assert: viewer show = viewNewGame.! !
-
-!TicTacToeObserverTest methodsFor: 'Testing' stamp: 'GAA 6/4/2018 13:58:48'!
-test11OWinningWithLineInFirstRowInBoard
-	| viewer game viewNewGame |
-	game _ TicTacToe new.
-	viewer _ TicTacToeViewer new.
-	game addObserver: viewer.
-	viewNewGame _ viewer newBoard.
-	(viewNewGame at: 3)
-		at: 3
-		put: $X.
-	(viewNewGame at: 1)
-		at: 1
-		put: $O.
-	(viewNewGame at: 5)
-		at: 5
-		put: $X.
-	(viewNewGame at: 1)
-		at: 3
-		put: $O.
-	(viewNewGame at: 5)
-		at: 1
-		put: $X.
-	(viewNewGame at: 1)
-		at: 5
-		put: $O.
-	viewNewGame add: 'Juego terminado - Ganó O!!'.
-	game markWithXAt: 2 @ 2.
-	game markWithOAt: 1 @ 1.
-	game markWithXAt: 3 @ 3.
-	game markWithOAt: 1 @ 2.
-	game markWithXAt: 3 @ 1.
-	game markWithOAt: 1 @ 3.
-	self assert: viewer show = viewNewGame.! !
-
-!TicTacToeObserverTest methodsFor: 'Testing' stamp: 'GAA 6/4/2018 13:59:57'!
-test12TieBoardWithTieAnnounced
-	| viewer game viewNewGame |
-	game _ TicTacToe new.
-	viewer _ TicTacToeViewer new.
-	game addObserver: viewer.
-	viewNewGame _ viewer newBoard.
-	(viewNewGame at: 1)
-		at: 3
-		put: $X.
-	(viewNewGame at: 1)
-		at: 1
-		put: $O.
-	(viewNewGame at: 5)
-		at: 5
-		put: $X.
-	(viewNewGame at: 3)
-		at: 3
-		put: $O.
-	(viewNewGame at: 5)
-		at: 1
-		put: $X.
-	(viewNewGame at: 3)
-		at: 5
-		put: $O.
-	(viewNewGame at: 3)
-		at: 1
-		put: $X.
-	(viewNewGame at: 5)
-		at: 3
-		put: $O.
-	(viewNewGame at: 1)
-		at: 5
-		put: $X.
-	viewNewGame add: 'Juego terminado - Empate!!'.
-	game markWithXAt: 1 @ 2.
-	game markWithOAt: 1 @ 1.
-	game markWithXAt: 3 @ 3.
-	game markWithOAt: 2 @ 2.
-	game markWithXAt: 3 @ 1.
-	game markWithOAt: 2 @ 3.
-	game markWithXAt: 2 @ 1.
-	game markWithOAt: 3 @ 2.
-	game markWithXAt: 1 @ 3.
-	self assert: viewer show = viewNewGame.! !
-
-!TicTacToeObserverTest methodsFor: 'Testing' stamp: 'GAA 6/4/2018 14:00:41'!
-test13XWinningInBoardAndConsoleLog
-	| viewer game viewNewGame console |
-	game _ TicTacToe new.
-	viewer _ TicTacToeViewer new.
-	game addObserver: viewer.
-	console _ TicTacToeConsole new.
-	game addObserver: console.
-	viewNewGame _ viewer newBoard.
-	(viewNewGame at: 3)
-		at: 3
-		put: $X.
-	(viewNewGame at: 1)
-		at: 1
-		put: $O.
-	(viewNewGame at: 1)
-		at: 5
-		put: $X.
-	(viewNewGame at: 1)
-		at: 3
-		put: $O.
-	(viewNewGame at: 5)
-		at: 1
-		put: $X.
-	viewNewGame add: 'Juego terminado - Ganó X!!'.
-	game markWithXAt: 2 @ 2.
-	game markWithOAt: 1 @ 1.
-	game markWithXAt: 1 @ 3.
-	game markWithOAt: 1 @ 2.
-	game markWithXAt: 3 @ 1.
-	self assert: viewer show = viewNewGame.
-	self assert: (console log at: 1) = 'X marcó en 2@2'.
-	self assert: (console log at: 2) = 'Estado: Jugando O'.
-	self assert: (console log at: 3) = 'O marcó en 1@1'.
-	self assert: (console log at: 4) = 'Estado: Jugando X'.
-	self assert: (console log at: 5) = 'X marcó en 1@3'.
-	self assert: (console log at: 6) = 'Estado: Jugando O'.
-	self assert: (console log at: 7) = 'O marcó en 1@2'.
-	self assert: (console log at: 8) = 'Estado: Jugando X'.
-	self assert: (console log at: 9) = 'X marcó en 3@1'.
-	self assert: (console log at: 10) = 'Juego terminado - Ganó X!!'.
-	self assert: console log size = 10.! !
+!TicTacToeObserverTest methodsFor: 'assertions' stamp: 'PGF 6/4/2018 15:11:26'!
+assertPlayerXWinAt: index
+	self assert: ((console log at: index) = 'Juego terminado - Ganó X!!') .! !
 
 
 !classDefinition: #TicTacToeTest category: #TicTacToe!
@@ -1016,8 +1012,11 @@ notifyMarkWithOAt: aPosition
 notifyMarkWithXAt: aPosition
 	lines add: 'X marcó en ', aPosition printString! !
 
-!TicTacToeConsole methodsFor: 'notifications' stamp: 'PGF 5/31/2018 20:16:48'!
+!TicTacToeConsole methodsFor: 'notifications' stamp: 'PGF 6/4/2018 16:06:36'!
 notifyNewState: aState
+     "Estos If se pueden sacar facilmente con doble dispatch con los objetos de estado del tictactoe enviando un mensaje tipo aState notify: self. y recibir luego uno de cada estado como self notofyPlayingX.
+ 	No nos parecio correcto modificar los objetos state para agregar comportamiento a los observadores. Por esto ultimo decidimos dejar los if       
+	"
 	(aState isKindOf: PlayingO) ifTrue: [ lines add: 'Estado: Jugando O' ].
 	(aState isKindOf: PlayingX) ifTrue: [ lines add: 'Estado: Jugando X' ].
 	(aState isKindOf: PlayerXWon) ifTrue: [ lines add: 'Juego terminado - Ganó X!!' ].
@@ -1073,8 +1072,11 @@ notifyMarkWithXAt: aPosition
 	newRow at: (aPosition y + (aPosition y - 1)) put: $X.
 ! !
 
-!TicTacToeViewer methodsFor: 'notifications' stamp: 'PGF 5/31/2018 20:46:49'!
+!TicTacToeViewer methodsFor: 'notifications' stamp: 'PGF 6/4/2018 16:06:56'!
 notifyNewState: aState
+     "Estos If se pueden sacar facilmente con doble dispatch con los objetos de estado del tictactoe enviando un mensaje tipo aState notify: self. y recibir luego uno de cada estado como self notofyPlayingX.
+ 	No nos parecio correcto modificar los objetos state para agregar comportamiento a los observadores. Por esto ultimo decidimos dejar los if       
+	"
 	(aState isKindOf: PlayingO) ifTrue: [ state _ 'Estado: Jugando O' ].
 	(aState isKindOf: PlayingX) ifTrue: [ state _ 'Estado: Jugando X' ].
 	(aState isKindOf: PlayerXWon) ifTrue: [ state _ 'Juego terminado - Ganó X!!' ].
