@@ -79,16 +79,28 @@ test08CartContentIsEqualToTheAddedBooks
 	self assert: books size equals: 2.
 ! !
 
+!TusLibrosTest methodsFor: 'testing' stamp: 'GAA 6/7/2018 13:23:15'!
+test09CartShouldRaiseErrorWithItemNotInCatalog
+	| cart |
+	cart _ Cart new.
+	self
+	should: [cart add: #NotABook.]
+	raise: Error - MessageNotUnderstood 
+	withExceptionDo: [:anError |
+		self assert: anError messageText equals: Cart notInCatalogErrorMessage.].
+! !
+
 
 !classDefinition: #Cart category: #'TusLibros-Ejercicio'!
 Object subclass: #Cart
-	instanceVariableNames: 'books'
+	instanceVariableNames: 'books catalog'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'TusLibros-Ejercicio'!
 
-!Cart methodsFor: 'accessing' stamp: 'PGF 6/4/2018 21:18:11'!
-add: aBook 
+!Cart methodsFor: 'accessing' stamp: 'GAA 6/7/2018 13:21:15'!
+add: aBook
+	catalog detect: [:anItem | anItem = aBook] ifNone: [self error: self class notInCatalogErrorMessage]. 
 	books add: aBook.! !
 
 !Cart methodsFor: 'accessing' stamp: 'PGF 6/4/2018 21:49:22'!
@@ -116,14 +128,17 @@ size
 	^books size.! !
 
 
-!Cart methodsFor: 'initialization' stamp: 'PGF 6/4/2018 21:19:16'!
+!Cart methodsFor: 'initialization' stamp: 'GAA 6/7/2018 13:15:56'!
 initialize
-	books _ OrderedCollection new.! !
+	books _ OrderedCollection new.
+	catalog _ #(#ABook #ABook2).! !
 
-
-!classDefinition: #XXXX category: #'TusLibros-Ejercicio'!
-Object subclass: #XXXX
-	instanceVariableNames: ''
-	classVariableNames: ''
-	poolDictionaries: ''
-	category: 'TusLibros-Ejercicio'!
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'Cart class' category: #'TusLibros-Ejercicio'!
+Cart class
+	instanceVariableNames: ''!
+
+!Cart class methodsFor: 'exceptions' stamp: 'GAA 6/7/2018 13:21:34'!
+notInCatalogErrorMessage
+	^ 'Item not in catalog'.! !
