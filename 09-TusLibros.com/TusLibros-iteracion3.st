@@ -100,40 +100,40 @@ setUp
 
 !classDefinition: #CashierTest category: #TusLibros!
 TestCase subclass: #CashierTest
-	instanceVariableNames: 'testObjectsFactory merchartProcesorBehavior'
+	instanceVariableNames: 'testObjectsFactory'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'TusLibros'!
 
-!CashierTest methodsFor: 'as yet unclassified' stamp: 'GAA 6/11/2018 20:47:46'!
-setUp 
+!CashierTest methodsFor: 'as yet unclassified' stamp: 'GAA 6/13/2018 15:11:24'!
+setUp
+	testObjectsFactory _ StoreTestObjectsFactory new.! !
 
-	testObjectsFactory := StoreTestObjectsFactory new.
-	merchartProcesorBehavior _ [].! !
-
-!CashierTest methodsFor: 'as yet unclassified' stamp: 'GAA 6/11/2018 20:47:40'!
+!CashierTest methodsFor: 'as yet unclassified' stamp: 'GAA 6/13/2018 14:35:51'!
 test01CanNotCheckoutAnEmptyCart
 
-	| salesBook |
+	| salesBook merchantProcesor|
 	
 	salesBook := OrderedCollection new.
+	merchantProcesor _ MerchantInterfaceSimulator withBehavior:#checkOut.
 	self 
 		should: [ Cashier 
 			toCheckout: testObjectsFactory createCart 
 			charging: testObjectsFactory notExpiredCreditCard 
 			on: testObjectsFactory today
 			registeringOn:  salesBook 
-			merchantProcesor: self]
+			merchantProcesor: merchantProcesor]
 		raise: Error - MessageNotUnderstood
 		withExceptionDo: [ :anError |
 			self assert: anError messageText = Cashier cartCanNotBeEmptyErrorMessage.
 			self assert: salesBook isEmpty ]! !
 
-!CashierTest methodsFor: 'as yet unclassified' stamp: 'GAA 6/11/2018 20:48:30'!
+!CashierTest methodsFor: 'as yet unclassified' stamp: 'GAA 6/13/2018 14:40:55'!
 test02CalculatedTotalIsCorrect
 
-	| cart cashier |
+	| cart cashier merchantProcesor |
 	
+	merchantProcesor _ MerchantInterfaceSimulator withBehavior:#checkOut.
 	cart := testObjectsFactory createCart.
 	cart add: 2 of: testObjectsFactory itemSellByTheStore.
 	
@@ -141,17 +141,18 @@ test02CalculatedTotalIsCorrect
 				charging: testObjectsFactory notExpiredCreditCard 
 				on: testObjectsFactory today 
 				registeringOn: OrderedCollection new
-				merchantProcesor: self.
+				merchantProcesor: merchantProcesor.
 	self assert: cashier checkOut = (testObjectsFactory itemSellByTheStorePrice * 2)! !
 
-!CashierTest methodsFor: 'as yet unclassified' stamp: 'GAA 6/11/2018 20:48:40'!
+!CashierTest methodsFor: 'as yet unclassified' stamp: 'GAA 6/13/2018 14:44:21'!
 test03CanNotCheckoutWithAnExpiredCreditCart
 
-	| cart salesBook |
+	| cart salesBook merchantProcesor |
 
 	cart := testObjectsFactory createCart.
 	cart add: testObjectsFactory itemSellByTheStore.
 	salesBook := OrderedCollection new.
+	merchantProcesor _ MerchantInterfaceSimulator withBehavior:#checkOut.
 	
 	self
 		should: [ Cashier 
@@ -159,126 +160,119 @@ test03CanNotCheckoutWithAnExpiredCreditCart
 				charging: testObjectsFactory expiredCreditCard 
 				on: testObjectsFactory today
 				registeringOn: salesBook 
-				merchantProcesor: self]
+				merchantProcesor: merchantProcesor]
 		raise: Error - MessageNotUnderstood
 		withExceptionDo: [ :anError | 
 			self assert: anError messageText = Cashier canNotChargeAnExpiredCreditCardErrorMessage.
 			self assert: salesBook isEmpty ]! !
 
-!CashierTest methodsFor: 'as yet unclassified' stamp: 'GAA 6/11/2018 20:48:48'!
+!CashierTest methodsFor: 'as yet unclassified' stamp: 'GAA 6/13/2018 14:44:47'!
 test04CheckoutRegistersASale
 
-	| cart cashier salesBook total |
+	| cart cashier salesBook total merchantProcesor |
 
 	cart := testObjectsFactory createCart.
 	cart add: testObjectsFactory itemSellByTheStore.
 	salesBook := OrderedCollection new.
+	merchantProcesor _ MerchantInterfaceSimulator withBehavior:#checkOut.
  
 	cashier:= Cashier 
 		toCheckout: cart 
 		charging: testObjectsFactory notExpiredCreditCard
 		on: testObjectsFactory today
 		registeringOn: salesBook
-		merchantProcesor: self.
+		merchantProcesor: merchantProcesor.
 	total := cashier checkOut.
 					
 	self assert: salesBook notEmpty.
 	self assert: salesBook first total = total.! !
 
-!CashierTest methodsFor: 'as yet unclassified' stamp: 'GAA 6/11/2018 21:05:47'!
+!CashierTest methodsFor: 'as yet unclassified' stamp: 'GAA 6/13/2018 14:55:35'!
 test05CanNotCheckoutWithAnStolenCreditCart
-	| cart cashier salesBook total |
-	merchartProcesorBehavior _ [ self error: self class stolenCardErrorMessage ].
+	| cart cashier salesBook total merchantProcesor |
+	
 	cart _ testObjectsFactory createCart.
 	cart add: testObjectsFactory itemSellByTheStore.
 	salesBook _ OrderedCollection new.
-	cashier _ Cashier
-		toCheckout: cart
-		charging: testObjectsFactory notExpiredCreditCard 
-		on: testObjectsFactory today
-		registeringOn: salesBook
-		merchantProcesor: self.
-	self
-		should: [ total _ cashier checkOut ]
-		raise: Error - MessageNotUnderstood
-		withExceptionDo: [ :error |
-			self
-				assert: error messageText
-				equals: self class stolenCardErrorMessage.
-			self assert: salesBook isEmpty ].! !
-
-!CashierTest methodsFor: 'as yet unclassified' stamp: 'GAA 6/11/2018 20:54:00'!
-test06CanNotCheckoutWithACreditCartWithoutBalance
-	| cart cashier salesBook total |
-	merchartProcesorBehavior _ [ self error: self class withoutBalanceErrorMessage ].
-	cart _ testObjectsFactory createCart.
-	cart add: testObjectsFactory itemSellByTheStore.
-	salesBook _ OrderedCollection new.
+	merchantProcesor _ MerchantInterfaceSimulator withBehavior:#stolenCard.
 	cashier _ Cashier
 		toCheckout: cart
 		charging: testObjectsFactory notExpiredCreditCard
 		on: testObjectsFactory today
 		registeringOn: salesBook
-		merchantProcesor: self.
+		merchantProcesor: merchantProcesor.
 	self
 		should: [ total _ cashier checkOut ]
 		raise: Error - MessageNotUnderstood
 		withExceptionDo: [ :error |
 			self
 				assert: error messageText
-				equals: self class withoutBalanceErrorMessage.
+				equals: MerchantInterfaceSimulator stolenCardErrorMessage.
 			self assert: salesBook isEmpty ].! !
 
-!CashierTest methodsFor: 'as yet unclassified' stamp: 'GAA 6/11/2018 20:57:43'!
-test07CanNotCallMerchantProcesorWithAnExpiredCreditCart
-
-	| cart salesBook merchartCalled |
-	merchartCalled _ false.
-	merchartProcesorBehavior _ [merchartCalled  _ true].
-	cart := testObjectsFactory createCart.
+!CashierTest methodsFor: 'as yet unclassified' stamp: 'GAA 6/13/2018 15:11:14'!
+test06CanNotCheckoutWithInsufficientFundsInCreditCart
+	| cart cashier salesBook total merchantProcesor |
+	cart _ testObjectsFactory createCart.
 	cart add: testObjectsFactory itemSellByTheStore.
-	salesBook := OrderedCollection new.
-	
+	salesBook _ OrderedCollection new.
+	merchantProcesor _ MerchantInterfaceSimulator withBehavior: #insufficientFunds.
+	cashier _ Cashier
+		toCheckout: cart
+		charging: testObjectsFactory notExpiredCreditCard
+		on: testObjectsFactory today
+		registeringOn: salesBook
+		merchantProcesor: merchantProcesor.
 	self
-		should: [ Cashier 
-				toCheckout: cart 
-				charging: testObjectsFactory expiredCreditCard 
-				on: testObjectsFactory today
-				registeringOn: salesBook 
-				merchantProcesor: self]
+		should: [ total _ cashier checkOut ]
 		raise: Error - MessageNotUnderstood
-		withExceptionDo: [ :anError | 
+		withExceptionDo: [ :error |
+			self
+				assert: error messageText
+				equals: MerchantInterfaceSimulator insufficientFundsErrorMessage.
+			self assert: salesBook isEmpty ].! !
+
+!CashierTest methodsFor: 'as yet unclassified' stamp: 'GAA 6/13/2018 15:08:19'!
+test07CanNotCallMerchantProcesorWithAnExpiredCreditCart
+	| cart salesBook  merchantProcesor |
+	
+	cart _ testObjectsFactory createCart.
+	cart add: testObjectsFactory itemSellByTheStore.
+	salesBook _ OrderedCollection new.
+	merchantProcesor _ MerchantInterfaceSimulator withBehavior:#checkOut.
+	self
+		should: [
+			Cashier
+				toCheckout: cart
+				charging: testObjectsFactory expiredCreditCard
+				on: testObjectsFactory today
+				registeringOn: salesBook
+				merchantProcesor: merchantProcesor]
+		raise: Error - MessageNotUnderstood
+		withExceptionDo: [ :anError |
 			self assert: anError messageText = Cashier canNotChargeAnExpiredCreditCardErrorMessage.
 			self assert: salesBook isEmpty.
-			self deny: merchartCalled .]! !
+			self assert: merchantProcesor numberOfCalls equals: 0].! !
 
-!CashierTest methodsFor: 'as yet unclassified' stamp: 'GAA 6/11/2018 21:00:44'!
-test08CheckoutRegistersASaleAndCalledMerchantProcesor
-
-	| cart cashier salesBook total merchantCalled|
-	
-	merchantCalled _ false.
-	merchartProcesorBehavior _ [merchantCalled _ true.].
-	cart := testObjectsFactory createCart.
+!CashierTest methodsFor: 'as yet unclassified' stamp: 'GAA 6/13/2018 15:10:11'!
+test08CheckoutRegistersASaleAndCalledMerchantProcesorOnce
+	| cart cashier salesBook total merchantProcesor |
+	cart _ testObjectsFactory createCart.
 	cart add: testObjectsFactory itemSellByTheStore.
-	salesBook := OrderedCollection new.
- 
-	cashier:= Cashier 
-		toCheckout: cart 
+	salesBook _ OrderedCollection new.
+	merchantProcesor _ MerchantInterfaceSimulator withBehavior: #checkOut.
+	cashier _ Cashier
+		toCheckout: cart
 		charging: testObjectsFactory notExpiredCreditCard
 		on: testObjectsFactory today
 		registeringOn: salesBook
-		merchantProcesor: self.
-	total := cashier checkOut.
-					
+		merchantProcesor: merchantProcesor.
+	total _ cashier checkOut.
 	self assert: salesBook notEmpty.
 	self assert: salesBook first total = total.
-	self assert: merchantCalled.! !
-
-
-!CashierTest methodsFor: 'merchant procesor' stamp: 'GAA 6/11/2018 20:43:36'!
-debit: anAmount fromCreditCard: aCreditCard 
-	merchartProcesorBehavior value.! !
+	self
+		assert: merchantProcesor numberOfCalls
+		equals: 1.! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
@@ -476,7 +470,6 @@ isExpiredOn: aDate
 	
 	^expiration start < (Month month: aDate monthIndex year: aDate yearNumber) start ! !
 
-
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
 !classDefinition: 'CreditCard class' category: #TusLibros!
@@ -487,6 +480,60 @@ CreditCard class
 expiringOn: aMonth 
 	
 	^self new initializeExpiringOn: aMonth! !
+
+
+!classDefinition: #MerchantInterfaceSimulator category: #TusLibros!
+Object subclass: #MerchantInterfaceSimulator
+	instanceVariableNames: 'behavior numberOfCalls'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'TusLibros'!
+
+!MerchantInterfaceSimulator methodsFor: 'private' stamp: 'GAA 6/13/2018 15:06:00'!
+initializeWithBehavior: aSymbolMessage
+	numberOfCalls _ 0.
+	behavior _ aSymbolMessage asMessage.! !
+
+
+!MerchantInterfaceSimulator methodsFor: 'accessing' stamp: 'GAA 6/13/2018 14:59:38'!
+debit: anAmount fromCreditCard: aCreditCard 
+	numberOfCalls _ numberOfCalls + 1.
+	behavior sendTo: self.! !
+
+!MerchantInterfaceSimulator methodsFor: 'accessing' stamp: 'GAA 6/13/2018 15:08:34'!
+numberOfCalls
+	^numberOfCalls! !
+
+
+!MerchantInterfaceSimulator methodsFor: 'behavior' stamp: 'GAA 6/13/2018 14:43:12'!
+checkOut! !
+
+!MerchantInterfaceSimulator methodsFor: 'behavior' stamp: 'GAA 6/13/2018 14:52:54'!
+insufficientFunds
+	self error: self class insufficientFundsErrorMessage.! !
+
+!MerchantInterfaceSimulator methodsFor: 'behavior' stamp: 'GAA 6/13/2018 14:47:45'!
+stolenCard
+	self error: self class stolenCardErrorMessage.! !
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'MerchantInterfaceSimulator class' category: #TusLibros!
+MerchantInterfaceSimulator class
+	instanceVariableNames: ''!
+
+!MerchantInterfaceSimulator class methodsFor: 'instance creation' stamp: 'GAA 6/13/2018 15:04:30'!
+withBehavior: aSymbolMessage
+	^self new initializeWithBehavior: aSymbolMessage.! !
+
+
+!MerchantInterfaceSimulator class methodsFor: 'error handling' stamp: 'GAA 6/13/2018 14:54:44'!
+insufficientFundsErrorMessage
+	^'This credit card funds are insufficient to make the purchase'.! !
+
+!MerchantInterfaceSimulator class methodsFor: 'error handling' stamp: 'GAA 6/13/2018 14:48:38'!
+stolenCardErrorMessage
+	^'This Credit Card is stolen'.! !
 
 
 !classDefinition: #MonthOfYear category: #TusLibros!
