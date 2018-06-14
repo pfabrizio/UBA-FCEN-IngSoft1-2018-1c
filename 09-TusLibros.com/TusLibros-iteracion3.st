@@ -104,6 +104,28 @@ TestCase subclass: #CashierTest
 	poolDictionaries: ''
 	category: 'TusLibros'!
 
+!CashierTest methodsFor: 'testing' stamp: 'PGF 6/14/2018 11:46:10'!
+assertMerchantProcesorWithBehavior: aBehavior shouldRiseErrorWithErrorMessage: anErrorMessage
+	| cart cashier salesBook total merchantProcesor |
+	cart _ testObjectsFactory createCart.
+	cart add: testObjectsFactory itemSellByTheStore.
+	salesBook _ OrderedCollection new.
+	merchantProcesor _ MerchantInterfaceSimulator withBehavior: aBehavior.
+	cashier _ Cashier
+		toCheckout: cart
+		charging: testObjectsFactory notExpiredCreditCard
+		on: testObjectsFactory today
+		registeringOn: salesBook
+		merchantProcesor: merchantProcesor.
+	self
+		should: [ total _ cashier checkOut ]
+		raise: Error - MessageNotUnderstood
+		withExceptionDo: [ :error |
+			self
+				assert: error messageText
+				equals: anErrorMessage.
+			self assert: salesBook isEmpty ].! !
+
 !CashierTest methodsFor: 'testing' stamp: 'PGF 6/14/2018 11:11:26'!
 test01CanNotCheckoutAnEmptyCart
 	| salesBook merchantProcesor|
@@ -181,50 +203,15 @@ test04CheckoutRegistersASale
 	self assert: salesBook notEmpty.
 	self assert: salesBook first total = total.! !
 
-!CashierTest methodsFor: 'testing' stamp: 'PGF 6/14/2018 11:14:18'!
+!CashierTest methodsFor: 'testing' stamp: 'PGF 6/14/2018 11:47:11'!
 test05CanNotCheckoutWithAnStolenCreditCart
-	| cart cashier salesBook total merchantProcesor |
-	
-	cart _ testObjectsFactory createCart.
-	cart add: testObjectsFactory itemSellByTheStore.
-	salesBook _ OrderedCollection new.
-	merchantProcesor _ MerchantInterfaceSimulator withBehavior:#stolenCard.
-	cashier _ Cashier
-		toCheckout: cart
-		charging: testObjectsFactory notExpiredCreditCard
-		on: testObjectsFactory today
-		registeringOn: salesBook
-		merchantProcesor: merchantProcesor.
-	self
-		should: [ total _ cashier checkOut ]
-		raise: Error - MessageNotUnderstood
-		withExceptionDo: [ :error |
-			self
-				assert: error messageText
-				equals: MerchantInterfaceSimulator stolenCardErrorMessage.
-			self assert: salesBook isEmpty ].! !
+	self assertMerchantProcesorWithBehavior: #stolenCard  shouldRiseErrorWithErrorMessage: MerchantInterfaceSimulator stolenCardErrorMessage.
+	! !
 
-!CashierTest methodsFor: 'testing' stamp: 'PGF 6/14/2018 11:15:05'!
+!CashierTest methodsFor: 'testing' stamp: 'PGF 6/14/2018 11:47:47'!
 test06CanNotCheckoutWithInsufficientFundsInCreditCart
-	| cart cashier salesBook total merchantProcesor |
-	cart _ testObjectsFactory createCart.
-	cart add: testObjectsFactory itemSellByTheStore.
-	salesBook _ OrderedCollection new.
-	merchantProcesor _ MerchantInterfaceSimulator withBehavior: #insufficientFunds.
-	cashier _ Cashier
-		toCheckout: cart
-		charging: testObjectsFactory notExpiredCreditCard
-		on: testObjectsFactory today
-		registeringOn: salesBook
-		merchantProcesor: merchantProcesor.
-	self
-		should: [ total _ cashier checkOut ]
-		raise: Error - MessageNotUnderstood
-		withExceptionDo: [ :error |
-			self
-				assert: error messageText
-				equals: MerchantInterfaceSimulator insufficientFundsErrorMessage.
-			self assert: salesBook isEmpty ].! !
+     self assertMerchantProcesorWithBehavior: #insufficientFunds  shouldRiseErrorWithErrorMessage: MerchantInterfaceSimulator insufficientFundsErrorMessage.
+	! !
 
 !CashierTest methodsFor: 'testing' stamp: 'PGF 6/14/2018 11:15:40'!
 test07CanNotCallMerchantProcesorWithAnExpiredCreditCart
