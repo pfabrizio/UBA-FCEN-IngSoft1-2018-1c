@@ -5,12 +5,12 @@ TestCase subclass: #CartTest
 	poolDictionaries: ''
 	category: 'TusLibros'!
 
-!CartTest methodsFor: 'tests' stamp: 'HernanWilkinson 6/17/2013 18:10'!
+!CartTest methodsFor: 'tests' stamp: 'PGF 6/14/2018 11:25:48'!
 test01NewCartsAreCreatedEmpty
 
 	self assert: testObjectsFactory createCart isEmpty! !
 
-!CartTest methodsFor: 'tests' stamp: 'HernanWilkinson 6/17/2013 18:10'!
+!CartTest methodsFor: 'tests' stamp: 'PGF 6/14/2018 11:26:04'!
 test02CanNotAddItemsThatDoNotBelongToStore
 
 	| cart |
@@ -24,7 +24,7 @@ test02CanNotAddItemsThatDoNotBelongToStore
 			self assert: anError messageText = cart invalidItemErrorMessage.
 			self assert: cart isEmpty ]! !
 
-!CartTest methodsFor: 'tests' stamp: 'HernanWilkinson 6/17/2013 18:10'!
+!CartTest methodsFor: 'tests' stamp: 'PGF 6/14/2018 11:26:15'!
 test03AfterAddingAnItemTheCartIsNotEmptyAnymore
 
 	| cart |
@@ -34,7 +34,7 @@ test03AfterAddingAnItemTheCartIsNotEmptyAnymore
 	cart add: testObjectsFactory itemSellByTheStore.
 	self deny: cart isEmpty ! !
 
-!CartTest methodsFor: 'tests' stamp: 'HernanWilkinson 6/17/2013 18:10'!
+!CartTest methodsFor: 'tests' stamp: 'PGF 6/14/2018 11:26:29'!
 test04CanNotAddNonPositiveNumberOfItems
 
 	| cart |
@@ -48,7 +48,7 @@ test04CanNotAddNonPositiveNumberOfItems
 			self assert: anError messageText = cart invalidQuantityErrorMessage.
 			self assert: cart isEmpty ]! !
 
-!CartTest methodsFor: 'tests' stamp: 'HernanWilkinson 6/17/2013 18:10'!
+!CartTest methodsFor: 'tests' stamp: 'PGF 6/14/2018 11:26:44'!
 test05CanNotAddMoreThanOneItemNotSellByTheStore
 
 	| cart |
@@ -62,7 +62,7 @@ test05CanNotAddMoreThanOneItemNotSellByTheStore
 			self assert: anError messageText = cart invalidItemErrorMessage.
 			self assert: cart isEmpty ]! !
 
-!CartTest methodsFor: 'tests' stamp: 'HernanWilkinson 6/17/2013 18:11'!
+!CartTest methodsFor: 'tests' stamp: 'PGF 6/14/2018 11:26:54'!
 test06CartRemembersAddedItems
 
 	| cart |
@@ -72,7 +72,7 @@ test06CartRemembersAddedItems
 	cart add: testObjectsFactory itemSellByTheStore.
 	self assert: (cart includes: testObjectsFactory itemSellByTheStore)! !
 
-!CartTest methodsFor: 'tests' stamp: 'HernanWilkinson 6/17/2013 18:11'!
+!CartTest methodsFor: 'tests' stamp: 'PGF 6/14/2018 11:27:02'!
 test07CartDoesNotHoldNotAddedItems
 
 	| cart |
@@ -81,9 +81,8 @@ test07CartDoesNotHoldNotAddedItems
 	
 	self deny: (cart includes: testObjectsFactory itemSellByTheStore)! !
 
-!CartTest methodsFor: 'tests' stamp: 'HernanWilkinson 6/17/2013 18:11'!
+!CartTest methodsFor: 'tests' stamp: 'PGF 6/14/2018 11:27:16'!
 test08CartRemembersTheNumberOfAddedItems
-
 	| cart |
 	
 	cart := testObjectsFactory createCart.
@@ -92,7 +91,7 @@ test08CartRemembersTheNumberOfAddedItems
 	self assert: (cart occurrencesOf: testObjectsFactory itemSellByTheStore) = 2! !
 
 
-!CartTest methodsFor: 'setup' stamp: 'HernanWilkinson 6/17/2013 18:09'!
+!CartTest methodsFor: 'setup' stamp: 'PGF 6/14/2018 11:25:39'!
 setUp 
 
 	testObjectsFactory := StoreTestObjectsFactory new.! !
@@ -105,13 +104,8 @@ TestCase subclass: #CashierTest
 	poolDictionaries: ''
 	category: 'TusLibros'!
 
-!CashierTest methodsFor: 'as yet unclassified' stamp: 'GAA 6/13/2018 15:11:24'!
-setUp
-	testObjectsFactory _ StoreTestObjectsFactory new.! !
-
-!CashierTest methodsFor: 'as yet unclassified' stamp: 'GAA 6/13/2018 14:35:51'!
+!CashierTest methodsFor: 'testing' stamp: 'PGF 6/14/2018 11:11:26'!
 test01CanNotCheckoutAnEmptyCart
-
 	| salesBook merchantProcesor|
 	
 	salesBook := OrderedCollection new.
@@ -128,7 +122,7 @@ test01CanNotCheckoutAnEmptyCart
 			self assert: anError messageText = Cashier cartCanNotBeEmptyErrorMessage.
 			self assert: salesBook isEmpty ]! !
 
-!CashierTest methodsFor: 'as yet unclassified' stamp: 'GAA 6/13/2018 14:40:55'!
+!CashierTest methodsFor: 'testing' stamp: 'PGF 6/14/2018 11:12:20'!
 test02CalculatedTotalIsCorrect
 
 	| cart cashier merchantProcesor |
@@ -144,7 +138,7 @@ test02CalculatedTotalIsCorrect
 				merchantProcesor: merchantProcesor.
 	self assert: cashier checkOut = (testObjectsFactory itemSellByTheStorePrice * 2)! !
 
-!CashierTest methodsFor: 'as yet unclassified' stamp: 'GAA 6/13/2018 14:44:21'!
+!CashierTest methodsFor: 'testing' stamp: 'PGF 6/14/2018 11:13:02'!
 test03CanNotCheckoutWithAnExpiredCreditCart
 
 	| cart salesBook merchantProcesor |
@@ -166,7 +160,7 @@ test03CanNotCheckoutWithAnExpiredCreditCart
 			self assert: anError messageText = Cashier canNotChargeAnExpiredCreditCardErrorMessage.
 			self assert: salesBook isEmpty ]! !
 
-!CashierTest methodsFor: 'as yet unclassified' stamp: 'GAA 6/13/2018 14:44:47'!
+!CashierTest methodsFor: 'testing' stamp: 'PGF 6/14/2018 11:13:42'!
 test04CheckoutRegistersASale
 
 	| cart cashier salesBook total merchantProcesor |
@@ -187,7 +181,7 @@ test04CheckoutRegistersASale
 	self assert: salesBook notEmpty.
 	self assert: salesBook first total = total.! !
 
-!CashierTest methodsFor: 'as yet unclassified' stamp: 'GAA 6/13/2018 14:55:35'!
+!CashierTest methodsFor: 'testing' stamp: 'PGF 6/14/2018 11:14:18'!
 test05CanNotCheckoutWithAnStolenCreditCart
 	| cart cashier salesBook total merchantProcesor |
 	
@@ -210,7 +204,7 @@ test05CanNotCheckoutWithAnStolenCreditCart
 				equals: MerchantInterfaceSimulator stolenCardErrorMessage.
 			self assert: salesBook isEmpty ].! !
 
-!CashierTest methodsFor: 'as yet unclassified' stamp: 'GAA 6/13/2018 15:11:14'!
+!CashierTest methodsFor: 'testing' stamp: 'PGF 6/14/2018 11:15:05'!
 test06CanNotCheckoutWithInsufficientFundsInCreditCart
 	| cart cashier salesBook total merchantProcesor |
 	cart _ testObjectsFactory createCart.
@@ -232,7 +226,7 @@ test06CanNotCheckoutWithInsufficientFundsInCreditCart
 				equals: MerchantInterfaceSimulator insufficientFundsErrorMessage.
 			self assert: salesBook isEmpty ].! !
 
-!CashierTest methodsFor: 'as yet unclassified' stamp: 'GAA 6/13/2018 15:08:19'!
+!CashierTest methodsFor: 'testing' stamp: 'PGF 6/14/2018 11:15:40'!
 test07CanNotCallMerchantProcesorWithAnExpiredCreditCart
 	| cart salesBook  merchantProcesor |
 	
@@ -254,7 +248,7 @@ test07CanNotCallMerchantProcesorWithAnExpiredCreditCart
 			self assert: salesBook isEmpty.
 			self assert: merchantProcesor numberOfCalls equals: 0].! !
 
-!CashierTest methodsFor: 'as yet unclassified' stamp: 'GAA 6/13/2018 15:10:11'!
+!CashierTest methodsFor: 'testing' stamp: 'PGF 6/14/2018 11:29:11'!
 test08CheckoutRegistersASaleAndCalledMerchantProcesorOnce
 	| cart cashier salesBook total merchantProcesor |
 	cart _ testObjectsFactory createCart.
@@ -270,9 +264,12 @@ test08CheckoutRegistersASaleAndCalledMerchantProcesorOnce
 	total _ cashier checkOut.
 	self assert: salesBook notEmpty.
 	self assert: salesBook first total = total.
-	self
-		assert: merchantProcesor numberOfCalls
-		equals: 1.! !
+	self assert: merchantProcesor numberOfCalls equals: 1.! !
+
+
+!CashierTest methodsFor: 'setup' stamp: 'PGF 6/14/2018 11:11:34'!
+setUp
+	testObjectsFactory _ StoreTestObjectsFactory new.! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
@@ -296,75 +293,75 @@ Object subclass: #Cart
 	poolDictionaries: ''
 	category: 'TusLibros'!
 
-!Cart methodsFor: 'error messages' stamp: 'HernanWilkinson 6/17/2013 17:45'!
+!Cart methodsFor: 'error messages' stamp: 'PGF 6/14/2018 11:20:04'!
 invalidItemErrorMessage
 	
 	^'Item is not in catalog'! !
 
-!Cart methodsFor: 'error messages' stamp: 'HernanWilkinson 6/17/2013 17:45'!
+!Cart methodsFor: 'error messages' stamp: 'PGF 6/14/2018 11:20:11'!
 invalidQuantityErrorMessage
 	
 	^'Invalid number of items'! !
 
 
-!Cart methodsFor: 'assertions' stamp: 'HernanWilkinson 6/17/2013 18:06'!
+!Cart methodsFor: 'assertions' stamp: 'PGF 6/14/2018 11:20:17'!
 assertIsValidItem: anItem
 
 	(catalog includesKey: anItem) ifFalse: [ self error: self invalidItemErrorMessage ]! !
 
-!Cart methodsFor: 'assertions' stamp: 'HernanWilkinson 6/17/2013 17:51'!
+!Cart methodsFor: 'assertions' stamp: 'PGF 6/14/2018 11:20:22'!
 assertIsValidQuantity: aQuantity
 
 	aQuantity strictlyPositive ifFalse: [ self error: self invalidQuantityErrorMessage ]! !
 
 
-!Cart methodsFor: 'initialization' stamp: 'HernanWilkinson 6/17/2013 17:48'!
+!Cart methodsFor: 'initialization' stamp: 'PGF 6/14/2018 11:20:31'!
 initializeAcceptingItemsOf: aCatalog
 
 	catalog := aCatalog.
 	items := OrderedCollection new.! !
 
 
-!Cart methodsFor: 'queries' stamp: 'HernanWilkinson 6/17/2013 17:45'!
+!Cart methodsFor: 'queries' stamp: 'PGF 6/14/2018 11:20:41'!
 occurrencesOf: anItem
 
 	^items occurrencesOf: anItem  ! !
 
 
-!Cart methodsFor: 'testing' stamp: 'HernanWilkinson 6/17/2013 17:44'!
+!Cart methodsFor: 'testing' stamp: 'PGF 6/14/2018 11:20:48'!
 includes: anItem
 
 	^items includes: anItem ! !
 
-!Cart methodsFor: 'testing' stamp: 'HernanWilkinson 6/17/2013 17:44'!
+!Cart methodsFor: 'testing' stamp: 'PGF 6/14/2018 11:20:53'!
 isEmpty
 	
 	^items isEmpty ! !
 
 
-!Cart methodsFor: 'as yet unclassified' stamp: 'HernanWilkinson 6/17/2013 18:04'!
-catalog
-	
-	^ catalog! !
-
-!Cart methodsFor: 'as yet unclassified' stamp: 'HernanWilkinson 6/17/2013 18:05'!
-itemsDo: aBlock
-	
-	^items do: aBlock ! !
-
-
-!Cart methodsFor: 'adding' stamp: 'HernanWilkinson 6/17/2013 17:44'!
+!Cart methodsFor: 'adding' stamp: 'PGF 6/14/2018 11:19:12'!
 add: anItem
 
 	^ self add: 1 of: anItem ! !
 
-!Cart methodsFor: 'adding' stamp: 'HernanWilkinson 6/17/2013 17:51'!
+!Cart methodsFor: 'adding' stamp: 'PGF 6/14/2018 11:19:21'!
 add: aQuantity of: anItem
 
 	self assertIsValidQuantity: aQuantity.
 	self assertIsValidItem: anItem.
 
 	1 to: aQuantity do: [ :aNumber | items add: anItem ]! !
+
+
+!Cart methodsFor: 'accessing' stamp: 'PGF 6/14/2018 11:19:48'!
+catalog
+	
+	^ catalog! !
+
+!Cart methodsFor: 'accessing' stamp: 'PGF 6/14/2018 11:19:41'!
+itemsDo: aBlock
+	
+	^items do: aBlock ! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
@@ -385,7 +382,15 @@ Object subclass: #Cashier
 	poolDictionaries: ''
 	category: 'TusLibros'!
 
-!Cashier methodsFor: 'as yet unclassified' stamp: 'GAA 6/11/2018 19:24:45'!
+!Cashier methodsFor: 'initialization' stamp: 'PGF 6/14/2018 11:22:49'!
+initializeToCheckout: aCart charging: aCreditCard registeringOn: aSalesBook merchantProcesor: aMerchantProcesor
+	cart _ aCart.
+	creditCart _ aCreditCard.
+	salesBook _ aSalesBook.
+	merchantProcesor _ aMerchantProcesor.! !
+
+
+!Cashier methodsFor: 'cart procesing' stamp: 'PGF 6/14/2018 11:22:31'!
 checkOut
 	
 	| priceList total |
@@ -399,18 +404,12 @@ checkOut
 	
 	^total! !
 
-!Cashier methodsFor: 'as yet unclassified' stamp: 'GAA 6/11/2018 20:02:19'!
+
+!Cashier methodsFor: 'credit card' stamp: 'PGF 6/14/2018 11:22:40'!
 debitFromCreditCard: anAmount
 	merchantProcesor
 		debit: anAmount
 		fromCreditCard: creditCart.! !
-
-!Cashier methodsFor: 'as yet unclassified' stamp: 'GAA 6/11/2018 20:05:48'!
-initializeToCheckout: aCart charging: aCreditCard registeringOn: aSalesBook merchantProcesor: aMerchantProcesor
-	cart _ aCart.
-	creditCart _ aCreditCard.
-	salesBook _ aSalesBook.
-	merchantProcesor _ aMerchantProcesor.! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
@@ -460,14 +459,13 @@ Object subclass: #CreditCard
 	poolDictionaries: ''
 	category: 'TusLibros'!
 
-!CreditCard methodsFor: 'as yet unclassified' stamp: 'HernanWilkinson 6/17/2013 18:38'!
+!CreditCard methodsFor: 'initialization' stamp: 'PGF 6/14/2018 11:09:28'!
 initializeExpiringOn: aMonth 
-	
 	expiration := aMonth ! !
 
-!CreditCard methodsFor: 'as yet unclassified' stamp: 'HernanWilkinson 6/17/2013 18:39'!
-isExpiredOn: aDate 
-	
+
+!CreditCard methodsFor: 'evaluating' stamp: 'PGF 6/14/2018 11:09:16'!
+isExpiredOn: aDate
 	^expiration start < (Month month: aDate monthIndex year: aDate yearNumber) start ! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
@@ -489,18 +487,18 @@ Object subclass: #MerchantInterfaceSimulator
 	poolDictionaries: ''
 	category: 'TusLibros'!
 
-!MerchantInterfaceSimulator methodsFor: 'private' stamp: 'GAA 6/13/2018 15:06:00'!
+!MerchantInterfaceSimulator methodsFor: 'private' stamp: 'PGF 6/14/2018 11:16:58'!
 initializeWithBehavior: aSymbolMessage
 	numberOfCalls _ 0.
 	behavior _ aSymbolMessage asMessage.! !
 
 
-!MerchantInterfaceSimulator methodsFor: 'accessing' stamp: 'GAA 6/13/2018 14:59:38'!
+!MerchantInterfaceSimulator methodsFor: 'accessing' stamp: 'PGF 6/14/2018 11:16:43'!
 debit: anAmount fromCreditCard: aCreditCard 
 	numberOfCalls _ numberOfCalls + 1.
 	behavior sendTo: self.! !
 
-!MerchantInterfaceSimulator methodsFor: 'accessing' stamp: 'GAA 6/13/2018 15:08:34'!
+!MerchantInterfaceSimulator methodsFor: 'accessing' stamp: 'PGF 6/14/2018 11:17:21'!
 numberOfCalls
 	^numberOfCalls! !
 
@@ -508,11 +506,11 @@ numberOfCalls
 !MerchantInterfaceSimulator methodsFor: 'behavior' stamp: 'GAA 6/13/2018 14:43:12'!
 checkOut! !
 
-!MerchantInterfaceSimulator methodsFor: 'behavior' stamp: 'GAA 6/13/2018 14:52:54'!
+!MerchantInterfaceSimulator methodsFor: 'behavior' stamp: 'PGF 6/14/2018 11:17:07'!
 insufficientFunds
 	self error: self class insufficientFundsErrorMessage.! !
 
-!MerchantInterfaceSimulator methodsFor: 'behavior' stamp: 'GAA 6/13/2018 14:47:45'!
+!MerchantInterfaceSimulator methodsFor: 'behavior' stamp: 'PGF 6/14/2018 11:17:12'!
 stolenCard
 	self error: self class stolenCardErrorMessage.! !
 
@@ -536,24 +534,6 @@ stolenCardErrorMessage
 	^'This Credit Card is stolen'.! !
 
 
-!classDefinition: #MonthOfYear category: #TusLibros!
-Object subclass: #MonthOfYear
-	instanceVariableNames: ''
-	classVariableNames: ''
-	poolDictionaries: ''
-	category: 'TusLibros'!
-
-"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
-
-!classDefinition: 'MonthOfYear class' category: #TusLibros!
-MonthOfYear class
-	instanceVariableNames: ''!
-
-!MonthOfYear class methodsFor: 'as yet unclassified' stamp: 'HernanWilkinson 6/17/2013 18:34'!
-of: aDate 
-	self shouldBeImplemented.! !
-
-
 !classDefinition: #Sale category: #TusLibros!
 Object subclass: #Sale
 	instanceVariableNames: 'total'
@@ -561,16 +541,15 @@ Object subclass: #Sale
 	poolDictionaries: ''
 	category: 'TusLibros'!
 
-!Sale methodsFor: 'as yet unclassified' stamp: 'HernanWilkinson 6/17/2013 18:48'!
-total
-	
-	^ total! !
-
-
-!Sale methodsFor: 'initialization' stamp: 'HernanWilkinson 6/17/2013 18:47'!
+!Sale methodsFor: 'initialization' stamp: 'PGF 6/14/2018 11:17:36'!
 initializeTotal: aTotal
 
 	total := aTotal ! !
+
+
+!Sale methodsFor: 'accessing' stamp: 'PGF 6/14/2018 11:07:54'!
+total
+	^ total! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
@@ -592,12 +571,12 @@ Object subclass: #StoreTestObjectsFactory
 	poolDictionaries: ''
 	category: 'TusLibros'!
 
-!StoreTestObjectsFactory methodsFor: 'cart' stamp: 'HernanWilkinson 6/17/2013 18:08'!
+!StoreTestObjectsFactory methodsFor: 'cart' stamp: 'PGF 6/14/2018 11:17:48'!
 createCart
 	
 	^Cart acceptingItemsOf: self defaultCatalog! !
 
-!StoreTestObjectsFactory methodsFor: 'cart' stamp: 'HernanWilkinson 6/17/2013 18:08'!
+!StoreTestObjectsFactory methodsFor: 'cart' stamp: 'PGF 6/14/2018 11:17:57'!
 defaultCatalog
 	
 	^ Dictionary new
@@ -605,40 +584,40 @@ defaultCatalog
 		yourself ! !
 
 
-!StoreTestObjectsFactory methodsFor: 'as yet unclassified' stamp: 'HernanWilkinson 6/17/2013 18:37'!
-today
-	
-	^ today! !
-
-
-!StoreTestObjectsFactory methodsFor: 'items' stamp: 'HernanWilkinson 6/17/2013 18:08'!
+!StoreTestObjectsFactory methodsFor: 'items' stamp: 'PGF 6/14/2018 11:18:04'!
 itemNotSellByTheStore
 	
 	^'invalidBook'! !
 
-!StoreTestObjectsFactory methodsFor: 'items' stamp: 'HernanWilkinson 6/17/2013 18:08'!
+!StoreTestObjectsFactory methodsFor: 'items' stamp: 'PGF 6/14/2018 11:18:09'!
 itemSellByTheStore
 	
 	^ 'validBook'! !
 
-!StoreTestObjectsFactory methodsFor: 'items' stamp: 'HernanWilkinson 6/17/2013 18:08'!
+!StoreTestObjectsFactory methodsFor: 'items' stamp: 'PGF 6/14/2018 11:18:14'!
 itemSellByTheStorePrice
 	
 	^10! !
 
 
-!StoreTestObjectsFactory methodsFor: 'initialization' stamp: 'HernanWilkinson 6/17/2013 18:37'!
+!StoreTestObjectsFactory methodsFor: 'initialization' stamp: 'PGF 6/14/2018 11:18:21'!
 initialize
 
 	today := DateAndTime now! !
 
 
-!StoreTestObjectsFactory methodsFor: 'credit card' stamp: 'GAA 6/11/2018 19:04:18'!
+!StoreTestObjectsFactory methodsFor: 'credit card' stamp: 'PGF 6/14/2018 11:18:27'!
 expiredCreditCard
 	
 	^CreditCard expiringOn: (Month month: today monthIndex year: today yearNumber - 1)! !
 
-!StoreTestObjectsFactory methodsFor: 'credit card' stamp: 'HernanWilkinson 6/17/2013 18:36'!
+!StoreTestObjectsFactory methodsFor: 'credit card' stamp: 'PGF 6/14/2018 11:18:32'!
 notExpiredCreditCard
 	
 	^CreditCard expiringOn: (Month month: today monthIndex year: today yearNumber + 1)! !
+
+
+!StoreTestObjectsFactory methodsFor: 'accessing' stamp: 'PGF 6/14/2018 11:18:40'!
+today
+	
+	^ today! !
