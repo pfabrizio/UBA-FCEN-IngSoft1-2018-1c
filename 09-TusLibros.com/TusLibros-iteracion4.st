@@ -273,7 +273,7 @@ test01
 		password: pass.
 	self assert: carritoId isInteger.! !
 
-!RestInterfaceTest methodsFor: 'testing' stamp: 'GAA 6/14/2018 21:35:29'!
+!RestInterfaceTest methodsFor: 'testing' stamp: 'GAA 6/15/2018 12:00:37'!
 test02
 	| rest carritoId id pass |
 	id _ #pablo.
@@ -288,20 +288,15 @@ test02
 		withExceptionDo: [ :error |
 			self
 				assert: error messageText
-				equals: RestInterface invalidUserOrPasswordErrorMessage.
+				equals: Authentication invalidUserOrPasswordErrorMessage.
 			self deny: carritoId isInteger ].! !
 
-!RestInterfaceTest methodsFor: 'testing' stamp: 'GAA 6/14/2018 21:37:07'!
+!RestInterfaceTest methodsFor: 'testing' stamp: 'GAA 6/15/2018 12:02:36'!
 test03
 	| rest carritoId id pass |
 	id _ #pepe.
 	pass _ 124.
 	rest _ RestInterface newFor: xxxx.
-	Dictionary new
-		
-			at: #pepe
-			put: 123;
-		yourself.
 	self
 		should: [
 			carritoId _ rest
@@ -311,10 +306,10 @@ test03
 		withExceptionDo: [ :error |
 			self
 				assert: error messageText
-				equals: RestInterface invalidUserOrPasswordErrorMessage.
+				equals: Authentication invalidUserOrPasswordErrorMessage.
 			self deny: carritoId isInteger ].! !
 
-!RestInterfaceTest methodsFor: 'testing' stamp: 'GAA 6/14/2018 21:37:34'!
+!RestInterfaceTest methodsFor: 'testing' stamp: 'GAA 6/15/2018 12:06:28'!
 test04
 	| rest carritoId id pass |
 	id _ #pepe.
@@ -333,7 +328,7 @@ test04
 		withExceptionDo: [ :error |
 			self
 				assert: error messageText
-				equals: RestInterface invalidCartIdErrorMessage ].! !
+				equals: XXXX invalidCartIdErrorMessage ].! !
 
 
 !classDefinition: #Authentication category: #TusLibros!
@@ -587,28 +582,14 @@ Object subclass: #RestInterface
 	poolDictionaries: ''
 	category: 'TusLibros'!
 
-!RestInterface methodsFor: 'private' stamp: 'GAA 6/14/2018 20:19:49'!
-authenticateUser: aUser withPassword: aPassword
-	|password|
-	password _ users at: aUser ifAbsent: [self invalidUserOrPassword].
-	password = aPassword ifFalse: [self invalidUserOrPassword].! !
 
-!RestInterface methodsFor: 'private' stamp: 'GAA 6/14/2018 20:11:13'!
-invalidUserOrPassword
-	self error: self class invalidUserOrPasswordErrorMessage.! !
-
-
-!RestInterface methodsFor: 'accessing' stamp: 'GAA 6/14/2018 20:29:47'!
+!RestInterface methodsFor: 'accessing' stamp: 'GAA 6/15/2018 12:04:34'!
 addToCart: aCartId book: aBookISBN withQuantity: aQuantity 
-	self error: self class invalidCartIdErrorMessage.! !
+	store addToCart: aCartId book: aBookISBN withQuantity: aQuantity.! !
 
 !RestInterface methodsFor: 'accessing' stamp: 'GAA 6/14/2018 21:33:15'!
 createCartForId: aUser password: aPassword
 	^ store createCartForUser: aUser password: aPassword.! !
-
-!RestInterface methodsFor: 'accessing' stamp: 'GAA 6/14/2018 21:30:45'!
-createCartWithId: anUser password: aPassword
-	^store createCartForUser: anUser password: aPassword.! !
 
 
 !RestInterface methodsFor: 'initialize' stamp: 'GAA 6/14/2018 21:27:22'!
@@ -629,10 +610,6 @@ newFor: aXXXX
 !RestInterface class methodsFor: 'error handling' stamp: 'GAA 6/14/2018 20:30:26'!
 invalidCartIdErrorMessage
 	^'El número de carrito es inválido'.! !
-
-!RestInterface class methodsFor: 'error handling' stamp: 'GAA 6/14/2018 20:15:30'!
-invalidUserOrPasswordErrorMessage
-	^'Combinación de usuario y password inválidos.'.! !
 
 
 !classDefinition: #Sale category: #TusLibros!
@@ -738,6 +715,10 @@ initializeWithCatalog: aCatalog authentication: anAuthentication
 	authentication _ anAuthentication.! !
 
 
+!XXXX methodsFor: 'accessing' stamp: 'GAA 6/15/2018 12:05:37'!
+addToCart: aCartId book: aBookISBN withQuantity: aQuantity
+	self error: self class invalidCartIdErrorMessage.! !
+
 !XXXX methodsFor: 'accessing' stamp: 'GAA 6/14/2018 21:34:35'!
 createCartForUser: anUser password: aPassword
 	authentication auth:anUser withPassword: aPassword.
@@ -752,3 +733,8 @@ XXXX class
 !XXXX class methodsFor: 'instance creation' stamp: 'GAA 6/14/2018 21:23:12'!
 newWithCatalog: aCatalog authentication: anAuthentication 
 	^self new initializeWithCatalog: aCatalog authentication: anAuthentication.! !
+
+
+!XXXX class methodsFor: 'error handling' stamp: 'GAA 6/15/2018 12:06:21'!
+invalidCartIdErrorMessage
+	^'El número de carrito es inválido'.! !
