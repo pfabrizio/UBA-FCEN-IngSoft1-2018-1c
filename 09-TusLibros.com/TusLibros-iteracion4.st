@@ -10,7 +10,7 @@ test01NewCartsAreCreatedEmpty
 
 	self assert: testObjectsFactory createCart isEmpty! !
 
-!CartTest methodsFor: 'tests' stamp: 'HernanWilkinson 6/17/2013 18:10'!
+!CartTest methodsFor: 'tests' stamp: 'GAA 6/15/2018 13:47:03'!
 test02CanNotAddItemsThatDoNotBelongToStore
 
 	| cart |
@@ -21,7 +21,7 @@ test02CanNotAddItemsThatDoNotBelongToStore
 		should: [ cart add: testObjectsFactory itemNotSellByTheStore ]
 		raise: Error - MessageNotUnderstood
 		withExceptionDo: [ :anError |
-			self assert: anError messageText = cart invalidItemErrorMessage.
+			self assert: anError messageText = Cart invalidItemErrorMessage.
 			self assert: cart isEmpty ]! !
 
 !CartTest methodsFor: 'tests' stamp: 'HernanWilkinson 6/17/2013 18:10'!
@@ -34,7 +34,7 @@ test03AfterAddingAnItemTheCartIsNotEmptyAnymore
 	cart add: testObjectsFactory itemSellByTheStore.
 	self deny: cart isEmpty ! !
 
-!CartTest methodsFor: 'tests' stamp: 'HernanWilkinson 6/17/2013 18:10'!
+!CartTest methodsFor: 'tests' stamp: 'GAA 6/15/2018 13:58:55'!
 test04CanNotAddNonPositiveNumberOfItems
 
 	| cart |
@@ -45,10 +45,10 @@ test04CanNotAddNonPositiveNumberOfItems
 		should: [cart add: 0 of: testObjectsFactory itemSellByTheStore ]
 		raise: Error - MessageNotUnderstood
 		withExceptionDo: [ :anError |
-			self assert: anError messageText = cart invalidQuantityErrorMessage.
+			self assert: anError messageText = Cart invalidQuantityErrorMessage.
 			self assert: cart isEmpty ]! !
 
-!CartTest methodsFor: 'tests' stamp: 'HernanWilkinson 6/17/2013 18:10'!
+!CartTest methodsFor: 'tests' stamp: 'GAA 6/15/2018 13:47:10'!
 test05CanNotAddMoreThanOneItemNotSellByTheStore
 
 	| cart |
@@ -59,7 +59,7 @@ test05CanNotAddMoreThanOneItemNotSellByTheStore
 		should: [cart add: 2 of: testObjectsFactory itemNotSellByTheStore  ]
 		raise: Error - MessageNotUnderstood
 		withExceptionDo: [ :anError |
-			self assert: anError messageText = cart invalidItemErrorMessage.
+			self assert: anError messageText = Cart invalidItemErrorMessage.
 			self assert: cart isEmpty ]! !
 
 !CartTest methodsFor: 'tests' stamp: 'HernanWilkinson 6/17/2013 18:11'!
@@ -309,7 +309,7 @@ test03
 				equals: Authentication invalidUserOrPasswordErrorMessage.
 			self deny: carritoId isInteger ].! !
 
-!RestInterfaceTest methodsFor: 'testing' stamp: 'GAA 6/15/2018 12:06:28'!
+!RestInterfaceTest methodsFor: 'testing' stamp: 'GAA 6/15/2018 13:55:32'!
 test04
 	| rest carritoId id pass |
 	id _ #pepe.
@@ -322,13 +322,55 @@ test04
 		should: [
 			rest
 				addToCart: 999
-				book: 789
+				book: testObjectsFactory itemSellByTheStore
 				withQuantity: 1 ]
 		raise: Error - MessageNotUnderstood
 		withExceptionDo: [ :error |
 			self
 				assert: error messageText
 				equals: XXXX invalidCartIdErrorMessage ].! !
+
+!RestInterfaceTest methodsFor: 'testing' stamp: 'GAA 6/15/2018 13:47:35'!
+test05
+	| rest carritoId id pass |
+	id _ #pepe.
+	pass _ 123.
+	rest _ RestInterface newFor: xxxx.
+	carritoId _ rest
+		createCartForId: id
+		password: pass.
+	self
+		should: [
+			rest
+				addToCart: carritoId
+				book: testObjectsFactory itemNotSellByTheStore
+				withQuantity: 1 ]
+		raise: Error - MessageNotUnderstood
+		withExceptionDo: [ :error |
+			self
+				assert: error messageText
+				equals: Cart invalidItemErrorMessage ].! !
+
+!RestInterfaceTest methodsFor: 'testing' stamp: 'GAA 6/15/2018 13:58:49'!
+test06
+	| rest carritoId id pass |
+	id _ #pepe.
+	pass _ 123.
+	rest _ RestInterface newFor: xxxx.
+	carritoId _ rest
+		createCartForId: id
+		password: pass.
+	self
+		should: [
+			rest
+				addToCart: carritoId
+				book: testObjectsFactory itemNotSellByTheStore
+				withQuantity: 0 ]
+		raise: Error - MessageNotUnderstood
+		withExceptionDo: [ :error |
+			self
+				assert: error messageText
+				equals: Cart invalidQuantityErrorMessage ].! !
 
 
 !classDefinition: #Authentication category: #TusLibros!
@@ -377,26 +419,16 @@ Object subclass: #Cart
 	poolDictionaries: ''
 	category: 'TusLibros'!
 
-!Cart methodsFor: 'error messages' stamp: 'HernanWilkinson 6/17/2013 17:45'!
-invalidItemErrorMessage
-	
-	^'Item is not in catalog'! !
 
-!Cart methodsFor: 'error messages' stamp: 'HernanWilkinson 6/17/2013 17:45'!
-invalidQuantityErrorMessage
-	
-	^'Invalid number of items'! !
-
-
-!Cart methodsFor: 'assertions' stamp: 'HernanWilkinson 6/17/2013 18:06'!
+!Cart methodsFor: 'assertions' stamp: 'GAA 6/15/2018 13:46:53'!
 assertIsValidItem: anItem
 
-	(catalog includesKey: anItem) ifFalse: [ self error: self invalidItemErrorMessage ]! !
+	(catalog includesKey: anItem) ifFalse: [ self error: self class invalidItemErrorMessage ]! !
 
-!Cart methodsFor: 'assertions' stamp: 'HernanWilkinson 6/17/2013 17:51'!
+!Cart methodsFor: 'assertions' stamp: 'GAA 6/15/2018 13:59:17'!
 assertIsValidQuantity: aQuantity
 
-	aQuantity strictlyPositive ifFalse: [ self error: self invalidQuantityErrorMessage ]! !
+	aQuantity strictlyPositive ifFalse: [ self error: self class invalidQuantityErrorMessage ]! !
 
 
 !Cart methodsFor: 'initialization' stamp: 'HernanWilkinson 6/17/2013 17:48'!
@@ -447,6 +479,17 @@ add: aQuantity of: anItem
 !classDefinition: 'Cart class' category: #TusLibros!
 Cart class
 	instanceVariableNames: ''!
+
+!Cart class methodsFor: 'error handling' stamp: 'GAA 6/15/2018 13:46:31'!
+invalidItemErrorMessage
+	
+	^'Item is not in catalog'! !
+
+!Cart class methodsFor: 'error handling' stamp: 'GAA 6/15/2018 13:59:31'!
+invalidQuantityErrorMessage
+	
+	^'Invalid number of items'! !
+
 
 !Cart class methodsFor: 'instance creation' stamp: 'HernanWilkinson 6/17/2013 17:48'!
 acceptingItemsOf: aCatalog
@@ -704,24 +747,28 @@ today
 
 !classDefinition: #XXXX category: #TusLibros!
 Object subclass: #XXXX
-	instanceVariableNames: 'authentication catalog'
+	instanceVariableNames: 'authentication catalog carts'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'TusLibros'!
 
-!XXXX methodsFor: 'initialization' stamp: 'GAA 6/14/2018 21:33:36'!
+!XXXX methodsFor: 'initialization' stamp: 'GAA 6/15/2018 13:51:42'!
 initializeWithCatalog: aCatalog authentication: anAuthentication
 	catalog _ aCatalog.
-	authentication _ anAuthentication.! !
+	authentication _ anAuthentication.
+	carts _ Dictionary new.! !
 
 
-!XXXX methodsFor: 'accessing' stamp: 'GAA 6/15/2018 12:05:37'!
+!XXXX methodsFor: 'accessing' stamp: 'GAA 6/15/2018 13:54:39'!
 addToCart: aCartId book: aBookISBN withQuantity: aQuantity
-	self error: self class invalidCartIdErrorMessage.! !
+	| carrito |
+	carrito _ carts at: aCartId ifAbsent: [self error: self class invalidCartIdErrorMessage.].
+	carrito add: aQuantity of: aBookISBN.! !
 
-!XXXX methodsFor: 'accessing' stamp: 'GAA 6/14/2018 21:34:35'!
+!XXXX methodsFor: 'accessing' stamp: 'GAA 6/15/2018 13:50:57'!
 createCartForUser: anUser password: aPassword
 	authentication auth:anUser withPassword: aPassword.
+	carts at: 1 put:(Cart acceptingItemsOf: catalog).
 	^1.! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
