@@ -248,61 +248,65 @@ debit: anAmount from: aCreditCard
 
 !classDefinition: #RestInterfaceTest category: #TusLibros!
 TestCase subclass: #RestInterfaceTest
-	instanceVariableNames: 'testObjectsFactory xxxx'
+	instanceVariableNames: 'testObjectsFactory market'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'TusLibros'!
 
-!RestInterfaceTest methodsFor: 'testing' stamp: 'GAA 6/16/2018 16:05:30'!
+!RestInterfaceTest methodsFor: 'testing' stamp: 'GAA 6/18/2018 12:40:45'!
 setUp
-	testObjectsFactory := StoreTestObjectsFactory new.
-	xxxx _ XXXX 
-		newWithCatalog: testObjectsFactory defaultCatalog 
+	testObjectsFactory _ StoreTestObjectsFactory new.
+	market _ Market
+		newWithCatalog: testObjectsFactory defaultCatalog
 		authentication: (Authentication newWith: testObjectsFactory defaultUserPasswordDictionary).! !
 
-!RestInterfaceTest methodsFor: 'testing' stamp: 'GAA 6/16/2018 15:43:14'!
+!RestInterfaceTest methodsFor: 'testing' stamp: 'GAA 6/18/2018 12:40:45'!
 test01RestInterfaceWhenSuccessfullReturnsCartID
 	| rest carritoId |
-	rest _ RestInterface newFor: xxxx.
+	rest _ RestInterface newFor: market.
 	carritoId _ rest
 		createCartForId: testObjectsFactory validUserOfTheStore
 		password: testObjectsFactory validUserPasswordOfTheStore.
 	self assert: carritoId isInteger.! !
 
-!RestInterfaceTest methodsFor: 'testing' stamp: 'GAA 6/16/2018 16:04:30'!
+!RestInterfaceTest methodsFor: 'testing' stamp: 'GAA 6/18/2018 12:40:45'!
 test02CanNotCreateCartIDWithInvalidUsername
 	| rest carritoId |
-	rest _ RestInterface newFor: xxxx.
+	rest _ RestInterface newFor: market.
 	self
 		should: [
 			carritoId _ rest
-				createCartForId: testObjectsFactory invalidUserPasswordOfTheStore 
+				createCartForId: testObjectsFactory invalidUserPasswordOfTheStore
 				password: testObjectsFactory validUserPasswordOfTheStore ]
 		raise: Error - MessageNotUnderstood
 		withExceptionDo: [ :error |
-			self assert: error messageText equals: Authentication invalidUserOrPasswordErrorMessage.
+			self
+				assert: error messageText
+				equals: Authentication invalidUserOrPasswordErrorMessage.
 			self deny: carritoId isInteger ].! !
 
-!RestInterfaceTest methodsFor: 'testing' stamp: 'GAA 6/16/2018 16:04:20'!
+!RestInterfaceTest methodsFor: 'testing' stamp: 'GAA 6/18/2018 12:40:45'!
 test03CanNotCreateCartIDWithInvalidUserPassword
 	| rest carritoId |
-	rest _ RestInterface newFor: xxxx.
+	rest _ RestInterface newFor: market.
 	self
 		should: [
 			carritoId _ rest
-				createCartForId: testObjectsFactory validUserOfTheStore 
-				password: testObjectsFactory invalidUserPasswordOfTheStore]
+				createCartForId: testObjectsFactory validUserOfTheStore
+				password: testObjectsFactory invalidUserPasswordOfTheStore ]
 		raise: Error - MessageNotUnderstood
 		withExceptionDo: [ :error |
-			self assert: error messageText equals: Authentication invalidUserOrPasswordErrorMessage.
+			self
+				assert: error messageText
+				equals: Authentication invalidUserOrPasswordErrorMessage.
 			self deny: carritoId isInteger ].! !
 
-!RestInterfaceTest methodsFor: 'testing' stamp: 'GAA 6/16/2018 16:04:07'!
+!RestInterfaceTest methodsFor: 'testing' stamp: 'GAA 6/18/2018 12:40:45'!
 test04CanNotAddToCartWithInvalidCartId
 	| rest carritoId |
-	rest _ RestInterface newFor: xxxx.
+	rest _ RestInterface newFor: market.
 	carritoId _ rest
-		createCartForId: testObjectsFactory validUserOfTheStore 
+		createCartForId: testObjectsFactory validUserOfTheStore
 		password: testObjectsFactory validUserPasswordOfTheStore.
 	self
 		should: [
@@ -312,15 +316,17 @@ test04CanNotAddToCartWithInvalidCartId
 				withQuantity: 1 ]
 		raise: Error - MessageNotUnderstood
 		withExceptionDo: [ :error |
-			self assert: error messageText equals: XXXX invalidCartIdErrorMessage.
-			self deny: carritoId = 999.].! !
+			self
+				assert: error messageText
+				equals: Market invalidCartIdErrorMessage.
+			self deny: carritoId = 999 ].! !
 
-!RestInterfaceTest methodsFor: 'testing' stamp: 'GAA 6/16/2018 16:03:50'!
+!RestInterfaceTest methodsFor: 'testing' stamp: 'GAA 6/18/2018 12:40:45'!
 test05CanNotAddToCartWithAnItemNotInCatalog
 	| rest carritoId |
-	rest _ RestInterface newFor: xxxx.
+	rest _ RestInterface newFor: market.
 	carritoId _ rest
-		createCartForId: testObjectsFactory validUserOfTheStore 
+		createCartForId: testObjectsFactory validUserOfTheStore
 		password: testObjectsFactory validUserPasswordOfTheStore.
 	self
 		should: [
@@ -330,14 +336,16 @@ test05CanNotAddToCartWithAnItemNotInCatalog
 				withQuantity: 1 ]
 		raise: Error - MessageNotUnderstood
 		withExceptionDo: [ :error |
-			self assert: error messageText equals: Cart invalidItemErrorMessage ].! !
+			self
+				assert: error messageText
+				equals: Cart invalidItemErrorMessage ].! !
 
-!RestInterfaceTest methodsFor: 'testing' stamp: 'GAA 6/16/2018 16:03:39'!
+!RestInterfaceTest methodsFor: 'testing' stamp: 'GAA 6/18/2018 12:40:45'!
 test06CanNotAddToCartWithInvalidItemQuantity
 	| rest carritoId |
-	rest _ RestInterface newFor: xxxx.
+	rest _ RestInterface newFor: market.
 	carritoId _ rest
-		createCartForId: testObjectsFactory validUserOfTheStore 
+		createCartForId: testObjectsFactory validUserOfTheStore
 		password: testObjectsFactory validUserPasswordOfTheStore.
 	self
 		should: [
@@ -347,26 +355,53 @@ test06CanNotAddToCartWithInvalidItemQuantity
 				withQuantity: 0 ]
 		raise: Error - MessageNotUnderstood
 		withExceptionDo: [ :error |
-			self assert: error messageText equals: Cart invalidQuantityErrorMessage ].! !
+			self
+				assert: error messageText
+				equals: Cart invalidQuantityErrorMessage ].! !
 
-!RestInterfaceTest methodsFor: 'testing' stamp: 'GAA 6/16/2018 15:56:51'!
-test07
-	| rest carritoId |
-	rest _ RestInterface newFor: xxxx.
+!RestInterfaceTest methodsFor: 'testing' stamp: 'GAA 6/18/2018 14:14:28'!
+test07CanNotAddToCartAfter30MinutesWithoutOperationsOnCart
+	| rest carritoId reloj |
+	rest _ RestInterface newFor: market.
 	carritoId _ rest
 		createCartForId: testObjectsFactory validUserOfTheStore
 		password: testObjectsFactory validUserPasswordOfTheStore.
-	self 
-		should: [rest listCart: 999.] 
-		raise: Error - MessageNotUnderstood 
-		withExceptionDo: [:error | 
-			self assert: error messageText equals: XXXX invalidCartIdErrorMessage.
-			self deny: carritoId = 999.]! !
+	reloj _ Time now.
+	market 
+		setTimestamp: (Time hour: reloj hour - 1 minute: 0 second: 0)
+		forCart: carritoId.
+	self
+		should: [
+			rest
+				addToCart: carritoId
+				book: testObjectsFactory itemSellByTheStore
+				withQuantity: 1 ]
+		raise: Error - MessageNotUnderstood
+		withExceptionDo: [ :error |
+			self
+				assert: error messageText
+				equals: Market cartTimeOutErrorMessage ].! !
 
-!RestInterfaceTest methodsFor: 'testing' stamp: 'GAA 6/16/2018 16:03:15'!
+!RestInterfaceTest methodsFor: 'testing' stamp: 'GAA 6/18/2018 12:40:45'!
 test08
+	| rest carritoId |
+	rest _ RestInterface newFor: market.
+	carritoId _ rest
+		createCartForId: testObjectsFactory validUserOfTheStore
+		password: testObjectsFactory validUserPasswordOfTheStore.
+	self
+		should: [ rest listCart: 999 ]
+		raise: Error - MessageNotUnderstood
+		withExceptionDo: [ :error |
+			self
+				assert: error messageText
+				equals: Market invalidCartIdErrorMessage.
+			self deny: carritoId = 999 ].! !
+
+!RestInterfaceTest methodsFor: 'testing' stamp: 'GAA 6/18/2018 12:40:45'!
+test09
 	| rest carritoId listaItemsEnCarrito |
-	rest _ RestInterface newFor: xxxx.
+	rest _ RestInterface newFor: market.
 	carritoId _ rest
 		createCartForId: testObjectsFactory validUserOfTheStore
 		password: testObjectsFactory validUserPasswordOfTheStore.
@@ -375,10 +410,13 @@ test08
 		book: testObjectsFactory itemSellByTheStore
 		withQuantity: 1.
 	listaItemsEnCarrito _ rest listCart: carritoId.
-	
 	self deny: listaItemsEnCarrito isEmpty.
-	self assert: (listaItemsEnCarrito at: 1) equals: testObjectsFactory itemSellByTheStore.
-	self assert: (listaItemsEnCarrito at: 2) equals: 1.! !
+	self
+		assert: (listaItemsEnCarrito at: 1)
+		equals: testObjectsFactory itemSellByTheStore.
+	self
+		assert: (listaItemsEnCarrito at: 2)
+		equals: 1.! !
 
 
 !classDefinition: #Authentication category: #TusLibros!
@@ -636,6 +674,86 @@ expiringOn: aMonth
 	^self new initializeExpiringOn: aMonth! !
 
 
+!classDefinition: #Market category: #TusLibros!
+Object subclass: #Market
+	instanceVariableNames: 'authentication catalog carts'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'TusLibros'!
+
+!Market methodsFor: 'initialization' stamp: 'GAA 6/15/2018 13:51:42'!
+initializeWithCatalog: aCatalog authentication: anAuthentication
+	catalog _ aCatalog.
+	authentication _ anAuthentication.
+	carts _ Dictionary new.! !
+
+
+!Market methodsFor: 'accessing' stamp: 'GAA 6/18/2018 14:06:05'!
+addToCart: aCartId book: aBookISBN withQuantity: aQuantity
+	| carritoEntry |
+	carritoEntry _ self assertCartValidity: aCartId.
+	(carritoEntry at: #cart)
+		add: aQuantity
+		of: aBookISBN.! !
+
+!Market methodsFor: 'accessing' stamp: 'GAA 6/18/2018 13:34:33'!
+createCartForUser: anUser password: aPassword
+	| entry |
+	authentication auth:anUser withPassword: aPassword.
+	entry _ Dictionary new.
+	entry add: #cart -> (Cart acceptingItemsOf: catalog).
+	entry add: #timestamp -> Time now.
+	carts at: 1 put: entry.
+	^1.! !
+
+!Market methodsFor: 'accessing' stamp: 'GAA 6/18/2018 14:06:05'!
+itemListFromCart: aCartId
+	| carritoEntry |
+	carritoEntry _ self assertCartValidity: aCartId.
+	^ (carritoEntry at: #cart) itemList.! !
+
+
+!Market methodsFor: 'private' stamp: 'GAA 6/18/2018 14:00:32'!
+cartTimeOut
+	^Duration minutes: 30.! !
+
+!Market methodsFor: 'private' stamp: 'GAA 6/18/2018 13:36:13'!
+setTimestamp: aTime forCart: aCartId 
+	(carts at: aCartId ) at:#timestamp put: aTime.! !
+
+
+!Market methodsFor: 'assertions' stamp: 'GAA 6/18/2018 14:06:05'!
+assertCartValidity: aCartId
+	| cartEntry tiempoDesdeUltimaOperacion |
+	cartEntry _ carts
+		at: aCartId
+		ifAbsent: [ self error: self class invalidCartIdErrorMessage ].
+	tiempoDesdeUltimaOperacion _ Time now - (cartEntry at: #timestamp).
+	tiempoDesdeUltimaOperacion < self cartTimeOut ifFalse: [
+		carts removeKey: aCartId.
+		self error: self class cartTimeOutErrorMessage ].
+	^ cartEntry.! !
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'Market class' category: #TusLibros!
+Market class
+	instanceVariableNames: ''!
+
+!Market class methodsFor: 'instance creation' stamp: 'GAA 6/14/2018 21:23:12'!
+newWithCatalog: aCatalog authentication: anAuthentication 
+	^self new initializeWithCatalog: aCatalog authentication: anAuthentication.! !
+
+
+!Market class methodsFor: 'error handling' stamp: 'GAA 6/18/2018 13:38:47'!
+cartTimeOutErrorMessage
+	^'El carrito al que se quiere accceder ya no existe.'! !
+
+!Market class methodsFor: 'error handling' stamp: 'GAA 6/15/2018 12:06:21'!
+invalidCartIdErrorMessage
+	^'El número de carrito es inválido'.! !
+
+
 !classDefinition: #RestInterface category: #TusLibros!
 Object subclass: #RestInterface
 	instanceVariableNames: 'users store'
@@ -799,51 +917,3 @@ validUserOfTheStore
 !StoreTestObjectsFactory methodsFor: 'authentication' stamp: 'GAA 6/16/2018 15:42:00'!
 validUserPasswordOfTheStore
 	^ 123.! !
-
-
-!classDefinition: #XXXX category: #TusLibros!
-Object subclass: #XXXX
-	instanceVariableNames: 'authentication catalog carts'
-	classVariableNames: ''
-	poolDictionaries: ''
-	category: 'TusLibros'!
-
-!XXXX methodsFor: 'initialization' stamp: 'GAA 6/15/2018 13:51:42'!
-initializeWithCatalog: aCatalog authentication: anAuthentication
-	catalog _ aCatalog.
-	authentication _ anAuthentication.
-	carts _ Dictionary new.! !
-
-
-!XXXX methodsFor: 'accessing' stamp: 'GAA 6/15/2018 13:54:39'!
-addToCart: aCartId book: aBookISBN withQuantity: aQuantity
-	| carrito |
-	carrito _ carts at: aCartId ifAbsent: [self error: self class invalidCartIdErrorMessage.].
-	carrito add: aQuantity of: aBookISBN.! !
-
-!XXXX methodsFor: 'accessing' stamp: 'GAA 6/15/2018 13:50:57'!
-createCartForUser: anUser password: aPassword
-	authentication auth:anUser withPassword: aPassword.
-	carts at: 1 put:(Cart acceptingItemsOf: catalog).
-	^1.! !
-
-!XXXX methodsFor: 'accessing' stamp: 'GAA 6/16/2018 15:08:51'!
-itemListFromCart: aCartId 
-	| carrito |
-	carrito _ carts at: aCartId ifAbsent: [self error: self class invalidCartIdErrorMessage.].
-	^carrito itemList.! !
-
-"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
-
-!classDefinition: 'XXXX class' category: #TusLibros!
-XXXX class
-	instanceVariableNames: ''!
-
-!XXXX class methodsFor: 'instance creation' stamp: 'GAA 6/14/2018 21:23:12'!
-newWithCatalog: aCatalog authentication: anAuthentication 
-	^self new initializeWithCatalog: aCatalog authentication: anAuthentication.! !
-
-
-!XXXX class methodsFor: 'error handling' stamp: 'GAA 6/15/2018 12:06:21'!
-invalidCartIdErrorMessage
-	^'El número de carrito es inválido'.! !
