@@ -5,12 +5,12 @@ TestCase subclass: #CartTest
 	poolDictionaries: ''
 	category: 'TusLibros'!
 
-!CartTest methodsFor: 'tests' stamp: 'HernanWilkinson 6/17/2013 18:10'!
+!CartTest methodsFor: 'tests' stamp: 'PGF 6/18/2018 16:16:19'!
 test01NewCartsAreCreatedEmpty
 
 	self assert: testObjectsFactory createCart isEmpty! !
 
-!CartTest methodsFor: 'tests' stamp: 'GAA 6/15/2018 13:47:03'!
+!CartTest methodsFor: 'tests' stamp: 'PGF 6/18/2018 16:16:35'!
 test02CanNotAddItemsThatDoNotBelongToStore
 
 	| cart |
@@ -24,7 +24,7 @@ test02CanNotAddItemsThatDoNotBelongToStore
 			self assert: anError messageText = Cart invalidItemErrorMessage.
 			self assert: cart isEmpty ]! !
 
-!CartTest methodsFor: 'tests' stamp: 'HernanWilkinson 6/17/2013 18:10'!
+!CartTest methodsFor: 'tests' stamp: 'PGF 6/18/2018 16:16:46'!
 test03AfterAddingAnItemTheCartIsNotEmptyAnymore
 
 	| cart |
@@ -34,7 +34,7 @@ test03AfterAddingAnItemTheCartIsNotEmptyAnymore
 	cart add: testObjectsFactory itemSellByTheStore.
 	self deny: cart isEmpty ! !
 
-!CartTest methodsFor: 'tests' stamp: 'GAA 6/15/2018 13:58:55'!
+!CartTest methodsFor: 'tests' stamp: 'PGF 6/18/2018 16:17:00'!
 test04CanNotAddNonPositiveNumberOfItems
 
 	| cart |
@@ -48,7 +48,7 @@ test04CanNotAddNonPositiveNumberOfItems
 			self assert: anError messageText = Cart invalidQuantityErrorMessage.
 			self assert: cart isEmpty ]! !
 
-!CartTest methodsFor: 'tests' stamp: 'GAA 6/15/2018 13:47:10'!
+!CartTest methodsFor: 'tests' stamp: 'PGF 6/18/2018 16:17:13'!
 test05CanNotAddMoreThanOneItemNotSellByTheStore
 
 	| cart |
@@ -62,7 +62,7 @@ test05CanNotAddMoreThanOneItemNotSellByTheStore
 			self assert: anError messageText = Cart invalidItemErrorMessage.
 			self assert: cart isEmpty ]! !
 
-!CartTest methodsFor: 'tests' stamp: 'HernanWilkinson 6/17/2013 18:11'!
+!CartTest methodsFor: 'tests' stamp: 'PGF 6/18/2018 16:17:23'!
 test06CartRemembersAddedItems
 
 	| cart |
@@ -72,7 +72,7 @@ test06CartRemembersAddedItems
 	cart add: testObjectsFactory itemSellByTheStore.
 	self assert: (cart includes: testObjectsFactory itemSellByTheStore)! !
 
-!CartTest methodsFor: 'tests' stamp: 'HernanWilkinson 6/17/2013 18:11'!
+!CartTest methodsFor: 'tests' stamp: 'PGF 6/18/2018 16:17:32'!
 test07CartDoesNotHoldNotAddedItems
 
 	| cart |
@@ -81,7 +81,7 @@ test07CartDoesNotHoldNotAddedItems
 	
 	self deny: (cart includes: testObjectsFactory itemSellByTheStore)! !
 
-!CartTest methodsFor: 'tests' stamp: 'HernanWilkinson 6/17/2013 18:11'!
+!CartTest methodsFor: 'tests' stamp: 'PGF 6/18/2018 16:17:42'!
 test08CartRemembersTheNumberOfAddedItems
 
 	| cart |
@@ -92,7 +92,7 @@ test08CartRemembersTheNumberOfAddedItems
 	self assert: (cart occurrencesOf: testObjectsFactory itemSellByTheStore) = 2! !
 
 
-!CartTest methodsFor: 'setup' stamp: 'HernanWilkinson 6/17/2013 18:09'!
+!CartTest methodsFor: 'setup' stamp: 'PGF 6/18/2018 16:17:48'!
 setUp 
 
 	testObjectsFactory := StoreTestObjectsFactory new.! !
@@ -105,7 +105,7 @@ TestCase subclass: #CashierTest
 	poolDictionaries: ''
 	category: 'TusLibros'!
 
-!CashierTest methodsFor: 'tests' stamp: 'HernanWilkinson 6/17/2013 18:50'!
+!CashierTest methodsFor: 'tests' stamp: 'PGF 6/18/2018 16:19:36'!
 test01CanNotCheckoutAnEmptyCart
 
 	| salesBook |
@@ -123,7 +123,7 @@ test01CanNotCheckoutAnEmptyCart
 			self assert: anError messageText = Cashier cartCanNotBeEmptyErrorMessage.
 			self assert: salesBook isEmpty ]! !
 
-!CashierTest methodsFor: 'tests' stamp: 'HernanWilkinson 6/17/2013 18:51'!
+!CashierTest methodsFor: 'tests' stamp: 'PGF 6/18/2018 16:19:58'!
 test02CalculatedTotalIsCorrect
 
 	| cart cashier |
@@ -140,7 +140,7 @@ test02CalculatedTotalIsCorrect
 		
 	self assert: cashier checkOut = (testObjectsFactory itemSellByTheStorePrice * 2)! !
 
-!CashierTest methodsFor: 'tests' stamp: 'HernanWilkinson 6/17/2013 18:51'!
+!CashierTest methodsFor: 'tests' stamp: 'PGF 6/18/2018 16:20:21'!
 test03CanNotCheckoutWithAnExpiredCreditCart
 
 	| cart salesBook |
@@ -161,7 +161,7 @@ test03CanNotCheckoutWithAnExpiredCreditCart
 			self assert: anError messageText = Cashier canNotChargeAnExpiredCreditCardErrorMessage.
 			self assert: salesBook isEmpty ]! !
 
-!CashierTest methodsFor: 'tests' stamp: 'HernanWilkinson 6/17/2013 19:04'!
+!CashierTest methodsFor: 'tests' stamp: 'PGF 6/18/2018 16:20:43'!
 test04CheckoutRegistersASale
 
 	| cart cashier salesBook total |
@@ -182,7 +182,7 @@ test04CheckoutRegistersASale
 	self assert: salesBook size = 1.
 	self assert: salesBook first total = total.! !
 
-!CashierTest methodsFor: 'tests' stamp: 'HernanWilkinson 6/17/2013 19:00'!
+!CashierTest methodsFor: 'tests' stamp: 'PGF 6/18/2018 16:21:09'!
 test05CashierChargesCreditCardUsingMerchantProcessor
 
 	| cart cashier salesBook total creditCard debitedAmout debitedCreditCard  |
@@ -207,7 +207,7 @@ test05CashierChargesCreditCardUsingMerchantProcessor
 	self assert: debitedCreditCard = creditCard.
 	self assert: debitedAmout = total.! !
 
-!CashierTest methodsFor: 'tests' stamp: 'HernanWilkinson 6/17/2013 18:59'!
+!CashierTest methodsFor: 'tests' stamp: 'PGF 6/18/2018 16:21:36'!
 test06CashierDoesNotSaleWhenTheCreditCardHasNoCredit
 
 	| cart cashier salesBook creditCard |
@@ -233,14 +233,14 @@ test06CashierDoesNotSaleWhenTheCreditCardHasNoCredit
 			self assert: salesBook isEmpty ]! !
 
 
-!CashierTest methodsFor: 'setup' stamp: 'HernanWilkinson 6/17/2013 19:03'!
+!CashierTest methodsFor: 'setup' stamp: 'PGF 6/18/2018 16:21:45'!
 setUp 
 
 	testObjectsFactory := StoreTestObjectsFactory new.
 	debitBehavior := [ :anAmount :aCreditCard | ]! !
 
 
-!CashierTest methodsFor: 'merchant processor protocol' stamp: 'HernanWilkinson 6/17/2013 19:02'!
+!CashierTest methodsFor: 'merchant processor protocol' stamp: 'PGF 6/18/2018 16:21:52'!
 debit: anAmount from: aCreditCard 
 
 	^debitBehavior value: anAmount value: aCreditCard ! !
@@ -253,14 +253,7 @@ TestCase subclass: #RestInterfaceTest
 	poolDictionaries: ''
 	category: 'TusLibros'!
 
-!RestInterfaceTest methodsFor: 'testing' stamp: 'GAA 6/18/2018 14:49:22'!
-setUp
-	testObjectsFactory _ StoreTestObjectsFactory new.
-	market _ Store
-		newWithCatalog: testObjectsFactory defaultCatalog
-		authentication: (Authentication newWith: testObjectsFactory defaultUserPasswordDictionary).! !
-
-!RestInterfaceTest methodsFor: 'testing' stamp: 'GAA 6/18/2018 12:40:45'!
+!RestInterfaceTest methodsFor: 'testing' stamp: 'PGF 6/18/2018 16:24:41'!
 test01RestInterfaceWhenSuccessfullReturnsCartID
 	| rest carritoId |
 	rest _ RestInterface newFor: market.
@@ -269,7 +262,7 @@ test01RestInterfaceWhenSuccessfullReturnsCartID
 		password: testObjectsFactory validUserPasswordOfTheStore.
 	self assert: carritoId isInteger.! !
 
-!RestInterfaceTest methodsFor: 'testing' stamp: 'GAA 6/18/2018 12:40:45'!
+!RestInterfaceTest methodsFor: 'testing' stamp: 'PGF 6/18/2018 16:24:58'!
 test02CanNotCreateCartIDWithInvalidUsername
 	| rest carritoId |
 	rest _ RestInterface newFor: market.
@@ -285,7 +278,7 @@ test02CanNotCreateCartIDWithInvalidUsername
 				equals: Authentication invalidUserOrPasswordErrorMessage.
 			self deny: carritoId isInteger ].! !
 
-!RestInterfaceTest methodsFor: 'testing' stamp: 'GAA 6/18/2018 12:40:45'!
+!RestInterfaceTest methodsFor: 'testing' stamp: 'PGF 6/18/2018 16:25:17'!
 test03CanNotCreateCartIDWithInvalidUserPassword
 	| rest carritoId |
 	rest _ RestInterface newFor: market.
@@ -301,7 +294,7 @@ test03CanNotCreateCartIDWithInvalidUserPassword
 				equals: Authentication invalidUserOrPasswordErrorMessage.
 			self deny: carritoId isInteger ].! !
 
-!RestInterfaceTest methodsFor: 'testing' stamp: 'GAA 6/18/2018 14:49:22'!
+!RestInterfaceTest methodsFor: 'testing' stamp: 'PGF 6/18/2018 16:25:39'!
 test04CanNotAddToCartWithInvalidCartId
 	| rest carritoId |
 	rest _ RestInterface newFor: market.
@@ -321,7 +314,7 @@ test04CanNotAddToCartWithInvalidCartId
 				equals: Store invalidCartIdErrorMessage.
 			self deny: carritoId = 999 ].! !
 
-!RestInterfaceTest methodsFor: 'testing' stamp: 'GAA 6/18/2018 12:40:45'!
+!RestInterfaceTest methodsFor: 'testing' stamp: 'PGF 6/18/2018 16:25:58'!
 test05CanNotAddToCartWithAnItemNotInCatalog
 	| rest carritoId |
 	rest _ RestInterface newFor: market.
@@ -340,7 +333,7 @@ test05CanNotAddToCartWithAnItemNotInCatalog
 				assert: error messageText
 				equals: Cart invalidItemErrorMessage ].! !
 
-!RestInterfaceTest methodsFor: 'testing' stamp: 'GAA 6/18/2018 12:40:45'!
+!RestInterfaceTest methodsFor: 'testing' stamp: 'PGF 6/18/2018 16:26:17'!
 test06CanNotAddToCartWithInvalidItemQuantity
 	| rest carritoId |
 	rest _ RestInterface newFor: market.
@@ -359,7 +352,7 @@ test06CanNotAddToCartWithInvalidItemQuantity
 				assert: error messageText
 				equals: Cart invalidQuantityErrorMessage ].! !
 
-!RestInterfaceTest methodsFor: 'testing' stamp: 'GAA 6/18/2018 14:49:22'!
+!RestInterfaceTest methodsFor: 'testing' stamp: 'PGF 6/18/2018 16:26:43'!
 test07CanNotAddToCartAfter30MinutesWithoutOperationsOnCart
 	| rest carritoId reloj |
 	rest _ RestInterface newFor: market.
@@ -386,8 +379,8 @@ test07CanNotAddToCartAfter30MinutesWithoutOperationsOnCart
 				assert: error messageText
 				equals: Store cartTimeOutErrorMessage ].! !
 
-!RestInterfaceTest methodsFor: 'testing' stamp: 'GAA 6/18/2018 14:49:22'!
-test08
+!RestInterfaceTest methodsFor: 'testing' stamp: 'PGF 6/18/2018 16:32:27'!
+test08WhenConsultItemsForInvalidCartIdShouldRiseError
 	| rest carritoId |
 	rest _ RestInterface newFor: market.
 	carritoId _ rest
@@ -402,8 +395,8 @@ test08
 				equals: Store invalidCartIdErrorMessage.
 			self deny: carritoId = 999 ].! !
 
-!RestInterfaceTest methodsFor: 'testing' stamp: 'GAA 6/18/2018 12:40:45'!
-test09
+!RestInterfaceTest methodsFor: 'testing' stamp: 'PGF 6/18/2018 16:33:29'!
+test09WhenConsultItemsForAnExistingCartThenGetTheItemsOfThatCart
 	| rest carritoId listaItemsEnCarrito |
 	rest _ RestInterface newFor: market.
 	carritoId _ rest
@@ -422,8 +415,8 @@ test09
 		assert: (listaItemsEnCarrito at: 2)
 		equals: 1.! !
 
-!RestInterfaceTest methodsFor: 'testing' stamp: 'GAA 6/18/2018 15:32:23'!
-test10
+!RestInterfaceTest methodsFor: 'testing' stamp: 'PGF 6/18/2018 16:37:35'!
+test10WhenCheckoutValidCartWithValidCreditCardThenListOfPurchasesIsEqualToTheListOfItemsOfTheCart
 	| rest carritoId today listaItemsEnCarrito |
 	rest _ RestInterface newFor: market.
 	today _ DateAndTime now.
@@ -435,12 +428,23 @@ test10
 		book: testObjectsFactory itemSellByTheStore
 		withQuantity: 1.
 	listaItemsEnCarrito _ rest listCart: carritoId.
-	rest 
-		checkOutCart: carritoId 
+	rest
+		checkOutCart: carritoId
 		creditCardNumber: 10001
-		creditCardExpirationDate: (Month month: today monthIndex year: today yearNumber + 1)
+		creditCardExpirationDate:
+			(Month
+				month: today monthIndex
+				year: today yearNumber + 1)
 		creditCardOwner: testObjectsFactory validUserOfTheStore.
-	self assert: (rest listPurchases: testObjectsFactory validUserOfTheStore) equals: listaItemsEnCarrito.! !
+	self
+		assert: (rest listPurchases: testObjectsFactory validUserOfTheStore)
+		equals: listaItemsEnCarrito.! !
+
+
+!RestInterfaceTest methodsFor: 'setup' stamp: 'PGF 6/18/2018 16:24:14'!
+setUp
+	testObjectsFactory _ StoreTestObjectsFactory new.
+	market _ Store newWithCatalog: testObjectsFactory defaultCatalog authentication: (Authentication newWith: testObjectsFactory defaultUserPasswordDictionary).! !
 
 
 !classDefinition: #Authentication category: #TusLibros!
@@ -450,19 +454,19 @@ Object subclass: #Authentication
 	poolDictionaries: ''
 	category: 'TusLibros'!
 
-!Authentication methodsFor: 'initialization' stamp: 'GAA 6/14/2018 21:21:56'!
+!Authentication methodsFor: 'initialization' stamp: 'PGF 6/18/2018 16:05:00'!
 initializeWith: aUserList 
 	users _ aUserList.! !
 
 
-!Authentication methodsFor: 'accessing' stamp: 'GAA 6/14/2018 21:32:44'!
+!Authentication methodsFor: 'accessing' stamp: 'PGF 6/18/2018 16:04:53'!
 auth: anUser withPassword: aPassword 
 	|password|
 	password _ users at: anUser ifAbsent: [self invalidUserOrPassword].
 	password = aPassword ifFalse: [self invalidUserOrPassword].! !
 
 
-!Authentication methodsFor: 'error handling' stamp: 'GAA 6/14/2018 21:36:13'!
+!Authentication methodsFor: 'error handling' stamp: 'PGF 6/18/2018 16:05:09'!
 invalidUserOrPassword
 	self error: self class invalidUserOrPasswordErrorMessage.! !
 
@@ -489,54 +493,52 @@ Object subclass: #Cart
 	poolDictionaries: ''
 	category: 'TusLibros'!
 
-
-!Cart methodsFor: 'assertions' stamp: 'GAA 6/15/2018 13:46:53'!
+!Cart methodsFor: 'assertions' stamp: 'PGF 6/18/2018 16:15:01'!
 assertIsValidItem: anItem
 
 	(catalog includesKey: anItem) ifFalse: [ self error: self class invalidItemErrorMessage ]! !
 
-!Cart methodsFor: 'assertions' stamp: 'GAA 6/15/2018 13:59:17'!
+!Cart methodsFor: 'assertions' stamp: 'PGF 6/18/2018 16:15:06'!
 assertIsValidQuantity: aQuantity
 
 	aQuantity strictlyPositive ifFalse: [ self error: self class invalidQuantityErrorMessage ]! !
 
 
-!Cart methodsFor: 'initialization' stamp: 'HernanWilkinson 6/17/2013 17:48'!
+!Cart methodsFor: 'initialization' stamp: 'PGF 6/18/2018 16:15:14'!
 initializeAcceptingItemsOf: aCatalog
 
 	catalog := aCatalog.
 	items := OrderedCollection new.! !
 
 
-!Cart methodsFor: 'queries' stamp: 'HernanWilkinson 6/17/2013 17:45'!
+!Cart methodsFor: 'queries' stamp: 'PGF 6/18/2018 16:15:21'!
 occurrencesOf: anItem
-
 	^items occurrencesOf: anItem  ! !
 
 
-!Cart methodsFor: 'testing' stamp: 'HernanWilkinson 6/17/2013 17:44'!
+!Cart methodsFor: 'testing' stamp: 'PGF 6/18/2018 16:15:27'!
 includes: anItem
 
 	^items includes: anItem ! !
 
-!Cart methodsFor: 'testing' stamp: 'HernanWilkinson 6/17/2013 17:44'!
+!Cart methodsFor: 'testing' stamp: 'PGF 6/18/2018 16:15:33'!
 isEmpty
 	
 	^items isEmpty ! !
 
 
-!Cart methodsFor: 'total' stamp: 'HernanWilkinson 6/17/2013 19:09'!
+!Cart methodsFor: 'total' stamp: 'PGF 6/18/2018 16:15:40'!
 total
 
 	^ items sum: [ :anItem | catalog at: anItem ]! !
 
 
-!Cart methodsFor: 'adding' stamp: 'HernanWilkinson 6/17/2013 17:44'!
+!Cart methodsFor: 'adding' stamp: 'PGF 6/18/2018 16:14:35'!
 add: anItem
 
 	^ self add: 1 of: anItem ! !
 
-!Cart methodsFor: 'adding' stamp: 'HernanWilkinson 6/17/2013 17:51'!
+!Cart methodsFor: 'adding' stamp: 'PGF 6/18/2018 16:14:45'!
 add: aQuantity of: anItem
 
 	self assertIsValidQuantity: aQuantity.
@@ -545,7 +547,7 @@ add: aQuantity of: anItem
 	1 to: aQuantity do: [ :aNumber | items add: anItem ]! !
 
 
-!Cart methodsFor: 'accessing' stamp: 'GAA 6/16/2018 15:18:41'!
+!Cart methodsFor: 'accessing' stamp: 'PGF 6/18/2018 16:15:54'!
 itemList
 	^items 
 		inject: Dictionary new
@@ -584,31 +586,30 @@ Object subclass: #Cashier
 	poolDictionaries: ''
 	category: 'TusLibros'!
 
-!Cashier methodsFor: 'checkout - private' stamp: 'HernanWilkinson 6/17/2013 19:08'!
+!Cashier methodsFor: 'checkout - private' stamp: 'PGF 6/18/2018 16:18:02'!
 calculateTotal
 
 	total := cart total.
 	! !
 
-!Cashier methodsFor: 'checkout - private' stamp: 'HernanWilkinson 6/17/2013 19:07'!
+!Cashier methodsFor: 'checkout - private' stamp: 'PGF 6/18/2018 16:18:13'!
 createSale
-
-	^ Sale of: total
+	^ Sale of: total.
 ! !
 
-!Cashier methodsFor: 'checkout - private' stamp: 'HernanWilkinson 6/17/2013 19:06'!
+!Cashier methodsFor: 'checkout - private' stamp: 'PGF 6/18/2018 16:18:23'!
 debitTotal
 
 	merchantProcessor debit: total from: creditCard.
 	! !
 
-!Cashier methodsFor: 'checkout - private' stamp: 'HernanWilkinson 6/17/2013 19:06'!
+!Cashier methodsFor: 'checkout - private' stamp: 'PGF 6/18/2018 16:18:28'!
 registerSale
 
 	salesBook add: self createSale! !
 
 
-!Cashier methodsFor: 'checkout' stamp: 'HernanWilkinson 6/17/2013 19:06'!
+!Cashier methodsFor: 'checkout' stamp: 'PGF 6/18/2018 16:18:40'!
 checkOut
 
 	self calculateTotal.
@@ -618,7 +619,7 @@ checkOut
 	^ total! !
 
 
-!Cashier methodsFor: 'initialization' stamp: 'HernanWilkinson 6/17/2013 18:53'!
+!Cashier methodsFor: 'initialization' stamp: 'PGF 6/18/2018 16:18:54'!
 initializeToCheckout: aCart charging: aCreditCard throught: aMerchantProcessor registeringOn: aSalesBook
 	
 	cart := aCart.
@@ -675,13 +676,13 @@ Object subclass: #CreditCard
 	poolDictionaries: ''
 	category: 'TusLibros'!
 
-!CreditCard methodsFor: 'testing' stamp: 'HernanWilkinson 6/17/2013 18:39'!
+!CreditCard methodsFor: 'testing' stamp: 'PGF 6/18/2018 16:22:27'!
 isExpiredOn: aDate 
 	
 	^expiration start < (Month month: aDate monthIndex year: aDate yearNumber) start ! !
 
 
-!CreditCard methodsFor: 'initialization' stamp: 'HernanWilkinson 6/17/2013 18:38'!
+!CreditCard methodsFor: 'initialization' stamp: 'PGF 6/18/2018 16:22:19'!
 initializeExpiringOn: aMonth 
 	
 	expiration := aMonth ! !
@@ -705,20 +706,19 @@ Object subclass: #RestInterface
 	poolDictionaries: ''
 	category: 'TusLibros'!
 
-
-!RestInterface methodsFor: 'accessing' stamp: 'GAA 6/15/2018 12:04:34'!
+!RestInterface methodsFor: 'accessing' stamp: 'PGF 6/18/2018 16:22:38'!
 addToCart: aCartId book: aBookISBN withQuantity: aQuantity 
 	store addToCart: aCartId book: aBookISBN withQuantity: aQuantity.! !
 
-!RestInterface methodsFor: 'accessing' stamp: 'GAA 6/18/2018 14:34:33'!
+!RestInterface methodsFor: 'accessing' stamp: 'PGF 6/18/2018 16:22:43'!
 checkOutCart: aCartId creditCardNumber: aCreditCardId creditCardExpirationDate: aMonth creditCardOwner: aUser
 	^store checkOutCart: aCartId creditCardNumber: aCreditCardId creditCardExpirationDate: aMonth creditCardOwner: aUser.! !
 
-!RestInterface methodsFor: 'accessing' stamp: 'GAA 6/14/2018 21:33:15'!
+!RestInterface methodsFor: 'accessing' stamp: 'PGF 6/18/2018 16:22:47'!
 createCartForId: aUser password: aPassword
 	^ store createCartForUser: aUser password: aPassword.! !
 
-!RestInterface methodsFor: 'accessing' stamp: 'GAA 6/16/2018 15:17:52'!
+!RestInterface methodsFor: 'accessing' stamp: 'PGF 6/18/2018 16:23:00'!
 listCart: aCartId 
 	| itemList |
 	itemList _ store itemListFromCart: aCartId.
@@ -731,7 +731,7 @@ listCart: aCartId
 					; yourself .]
 	! !
 
-!RestInterface methodsFor: 'accessing' stamp: 'GAA 6/18/2018 15:35:31'!
+!RestInterface methodsFor: 'accessing' stamp: 'PGF 6/18/2018 16:23:12'!
 listPurchases: anUser
 	| itemList |
 	itemList _ store listPurchases: anUser.
@@ -744,9 +744,9 @@ listPurchases: anUser
 					; yourself .]! !
 
 
-!RestInterface methodsFor: 'initialize' stamp: 'GAA 6/14/2018 21:27:22'!
-initializeWith: aXXXX 
-	store _ aXXXX.! !
+!RestInterface methodsFor: 'initialize' stamp: 'PGF 6/18/2018 16:23:36'!
+initializeWith: aStore
+	store _ aStore.! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
@@ -771,13 +771,13 @@ Object subclass: #Sale
 	poolDictionaries: ''
 	category: 'TusLibros'!
 
-!Sale methodsFor: 'total' stamp: 'HernanWilkinson 6/17/2013 18:48'!
+!Sale methodsFor: 'total' stamp: 'PGF 6/18/2018 16:37:56'!
 total
 	
 	^ total! !
 
 
-!Sale methodsFor: 'initialization' stamp: 'HernanWilkinson 6/17/2013 18:47'!
+!Sale methodsFor: 'initialization' stamp: 'PGF 6/18/2018 16:37:49'!
 initializeTotal: aTotal
 
 	total := aTotal ! !
@@ -802,7 +802,7 @@ Object subclass: #Store
 	poolDictionaries: ''
 	category: 'TusLibros'!
 
-!Store methodsFor: 'initialization' stamp: 'GAA 6/18/2018 15:04:05'!
+!Store methodsFor: 'initialization' stamp: 'PGF 6/18/2018 16:40:05'!
 initializeWithCatalog: aCatalog authentication: anAuthentication
 	catalog _ aCatalog.
 	authentication _ anAuthentication.
@@ -810,13 +810,13 @@ initializeWithCatalog: aCatalog authentication: anAuthentication
 	userPurchases _ Dictionary new.! !
 
 
-!Store methodsFor: 'accessing' stamp: 'GAA 6/18/2018 14:38:49'!
+!Store methodsFor: 'accessing' stamp: 'PGF 6/18/2018 16:38:07'!
 addToCart: aCartId book: aBookISBN withQuantity: aQuantity
 	| carrito |
 	carrito _ self assertCartValidity: aCartId.
 	carrito add: aQuantity of: aBookISBN.! !
 
-!Store methodsFor: 'accessing' stamp: 'GAA 6/18/2018 15:14:31'!
+!Store methodsFor: 'accessing' stamp: 'PGF 6/18/2018 16:38:23'!
 checkOutCart: aCartId creditCardNumber: aCreditCardId creditCardExpirationDate: aMonth creditCardOwner: aUser
 	| carrito cashier creditCard |
 	carrito _ self assertCartValidity: aCartId.
@@ -830,7 +830,7 @@ checkOutCart: aCartId creditCardNumber: aCreditCardId creditCardExpirationDate: 
 	cashier checkOut.
 	self updateUserPurchases: aCartId.! !
 
-!Store methodsFor: 'accessing' stamp: 'GAA 6/18/2018 15:11:10'!
+!Store methodsFor: 'accessing' stamp: 'PGF 6/18/2018 16:38:35'!
 createCartForUser: anUser password: aPassword
 	| entry |
 	authentication auth:anUser withPassword: aPassword.
@@ -841,26 +841,26 @@ createCartForUser: anUser password: aPassword
 	carts at: 1 put: entry.
 	^1.! !
 
-!Store methodsFor: 'accessing' stamp: 'GAA 6/18/2018 14:38:24'!
+!Store methodsFor: 'accessing' stamp: 'PGF 6/18/2018 16:38:45'!
 itemListFromCart: aCartId
 	| carrito |
 	carrito _ self assertCartValidity: aCartId.
 	^ carrito itemList.! !
 
-!Store methodsFor: 'accessing' stamp: 'GAA 6/18/2018 15:37:54'!
+!Store methodsFor: 'accessing' stamp: 'PGF 6/18/2018 16:38:50'!
 listPurchases: anUser
 	^(userPurchases at: anUser) copy.! !
 
 
-!Store methodsFor: 'private' stamp: 'GAA 6/18/2018 14:00:32'!
+!Store methodsFor: 'private' stamp: 'PGF 6/18/2018 16:39:20'!
 cartTimeOut
 	^Duration minutes: 30.! !
 
-!Store methodsFor: 'private' stamp: 'GAA 6/18/2018 13:36:13'!
+!Store methodsFor: 'private' stamp: 'PGF 6/18/2018 16:39:25'!
 setTimestamp: aTime forCart: aCartId 
 	(carts at: aCartId ) at:#timestamp put: aTime.! !
 
-!Store methodsFor: 'private' stamp: 'GAA 6/18/2018 15:37:18'!
+!Store methodsFor: 'private' stamp: 'PGF 6/18/2018 16:39:49'!
 updateUserPurchases: aCartId
 	| carrito compras itemsEnCarrito usuario |
 	carrito _ self assertCartValidity: aCartId.
@@ -879,7 +879,7 @@ updateUserPurchases: aCartId
 	userPurchases at: usuario put: compras.! !
 
 
-!Store methodsFor: 'assertions' stamp: 'GAA 6/18/2018 14:56:11'!
+!Store methodsFor: 'assertions' stamp: 'PGF 6/18/2018 16:39:13'!
 assertCartValidity: aCartId
 	| cartEntry tiempoDesdeUltimaOperacion |
 	cartEntry _ carts
@@ -919,28 +919,28 @@ Object subclass: #StoreTestObjectsFactory
 	poolDictionaries: ''
 	category: 'TusLibros'!
 
-!StoreTestObjectsFactory methodsFor: 'items' stamp: 'HernanWilkinson 6/17/2013 18:08'!
+!StoreTestObjectsFactory methodsFor: 'items' stamp: 'PGF 6/18/2018 16:40:37'!
 itemNotSellByTheStore
 	
 	^'invalidBook'! !
 
-!StoreTestObjectsFactory methodsFor: 'items' stamp: 'HernanWilkinson 6/17/2013 18:08'!
+!StoreTestObjectsFactory methodsFor: 'items' stamp: 'PGF 6/18/2018 16:40:42'!
 itemSellByTheStore
 	
 	^ 'validBook'! !
 
-!StoreTestObjectsFactory methodsFor: 'items' stamp: 'HernanWilkinson 6/17/2013 18:08'!
+!StoreTestObjectsFactory methodsFor: 'items' stamp: 'PGF 6/18/2018 16:40:48'!
 itemSellByTheStorePrice
 	
 	^10! !
 
 
-!StoreTestObjectsFactory methodsFor: 'cart' stamp: 'HernanWilkinson 6/17/2013 18:08'!
+!StoreTestObjectsFactory methodsFor: 'cart' stamp: 'PGF 6/18/2018 16:40:21'!
 createCart
 	
 	^Cart acceptingItemsOf: self defaultCatalog! !
 
-!StoreTestObjectsFactory methodsFor: 'cart' stamp: 'HernanWilkinson 6/17/2013 18:08'!
+!StoreTestObjectsFactory methodsFor: 'cart' stamp: 'PGF 6/18/2018 16:40:30'!
 defaultCatalog
 	
 	^ Dictionary new
@@ -948,30 +948,30 @@ defaultCatalog
 		yourself ! !
 
 
-!StoreTestObjectsFactory methodsFor: 'credit card' stamp: 'HernanWilkinson 6/17/2013 18:37'!
+!StoreTestObjectsFactory methodsFor: 'credit card' stamp: 'PGF 6/18/2018 16:40:56'!
 expiredCreditCard
 	
 	^CreditCard expiringOn: (Month month: today monthIndex year: today yearNumber - 1)! !
 
-!StoreTestObjectsFactory methodsFor: 'credit card' stamp: 'HernanWilkinson 6/17/2013 18:36'!
+!StoreTestObjectsFactory methodsFor: 'credit card' stamp: 'PGF 6/18/2018 16:41:01'!
 notExpiredCreditCard
 	
 	^CreditCard expiringOn: (Month month: today monthIndex year: today yearNumber + 1)! !
 
 
-!StoreTestObjectsFactory methodsFor: 'initialization' stamp: 'HernanWilkinson 6/17/2013 18:37'!
+!StoreTestObjectsFactory methodsFor: 'initialization' stamp: 'PGF 6/18/2018 16:41:08'!
 initialize
 
 	today := DateAndTime now! !
 
 
-!StoreTestObjectsFactory methodsFor: 'date' stamp: 'HernanWilkinson 6/17/2013 18:37'!
+!StoreTestObjectsFactory methodsFor: 'date' stamp: 'PGF 6/18/2018 16:41:15'!
 today
 	
 	^ today! !
 
 
-!StoreTestObjectsFactory methodsFor: 'authentication' stamp: 'GAA 6/16/2018 15:42:00'!
+!StoreTestObjectsFactory methodsFor: 'authentication' stamp: 'PGF 6/18/2018 16:41:23'!
 defaultUserPasswordDictionary
 	^ Dictionary new
 		
@@ -979,18 +979,18 @@ defaultUserPasswordDictionary
 			put: self validUserPasswordOfTheStore;
 		yourself.! !
 
-!StoreTestObjectsFactory methodsFor: 'authentication' stamp: 'GAA 6/16/2018 15:40:04'!
+!StoreTestObjectsFactory methodsFor: 'authentication' stamp: 'PGF 6/18/2018 16:41:27'!
 invalidUserOfTheStore
 	^#pablo.! !
 
-!StoreTestObjectsFactory methodsFor: 'authentication' stamp: 'GAA 6/16/2018 15:41:45'!
+!StoreTestObjectsFactory methodsFor: 'authentication' stamp: 'PGF 6/18/2018 16:41:32'!
 invalidUserPasswordOfTheStore
 	^ 124.! !
 
-!StoreTestObjectsFactory methodsFor: 'authentication' stamp: 'GAA 6/16/2018 15:38:01'!
+!StoreTestObjectsFactory methodsFor: 'authentication' stamp: 'PGF 6/18/2018 16:41:37'!
 validUserOfTheStore
 	^#pepe.! !
 
-!StoreTestObjectsFactory methodsFor: 'authentication' stamp: 'GAA 6/16/2018 15:42:00'!
+!StoreTestObjectsFactory methodsFor: 'authentication' stamp: 'PGF 6/18/2018 16:41:41'!
 validUserPasswordOfTheStore
 	^ 123.! !
