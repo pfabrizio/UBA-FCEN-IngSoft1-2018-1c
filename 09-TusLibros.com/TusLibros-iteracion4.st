@@ -253,10 +253,10 @@ TestCase subclass: #RestInterfaceTest
 	poolDictionaries: ''
 	category: 'TusLibros'!
 
-!RestInterfaceTest methodsFor: 'testing' stamp: 'GAA 6/18/2018 12:40:45'!
+!RestInterfaceTest methodsFor: 'testing' stamp: 'GAA 6/18/2018 14:49:22'!
 setUp
 	testObjectsFactory _ StoreTestObjectsFactory new.
-	market _ Market
+	market _ Store
 		newWithCatalog: testObjectsFactory defaultCatalog
 		authentication: (Authentication newWith: testObjectsFactory defaultUserPasswordDictionary).! !
 
@@ -301,7 +301,7 @@ test03CanNotCreateCartIDWithInvalidUserPassword
 				equals: Authentication invalidUserOrPasswordErrorMessage.
 			self deny: carritoId isInteger ].! !
 
-!RestInterfaceTest methodsFor: 'testing' stamp: 'GAA 6/18/2018 12:40:45'!
+!RestInterfaceTest methodsFor: 'testing' stamp: 'GAA 6/18/2018 14:49:22'!
 test04CanNotAddToCartWithInvalidCartId
 	| rest carritoId |
 	rest _ RestInterface newFor: market.
@@ -318,7 +318,7 @@ test04CanNotAddToCartWithInvalidCartId
 		withExceptionDo: [ :error |
 			self
 				assert: error messageText
-				equals: Market invalidCartIdErrorMessage.
+				equals: Store invalidCartIdErrorMessage.
 			self deny: carritoId = 999 ].! !
 
 !RestInterfaceTest methodsFor: 'testing' stamp: 'GAA 6/18/2018 12:40:45'!
@@ -359,7 +359,7 @@ test06CanNotAddToCartWithInvalidItemQuantity
 				assert: error messageText
 				equals: Cart invalidQuantityErrorMessage ].! !
 
-!RestInterfaceTest methodsFor: 'testing' stamp: 'GAA 6/18/2018 14:14:28'!
+!RestInterfaceTest methodsFor: 'testing' stamp: 'GAA 6/18/2018 14:49:22'!
 test07CanNotAddToCartAfter30MinutesWithoutOperationsOnCart
 	| rest carritoId reloj |
 	rest _ RestInterface newFor: market.
@@ -367,8 +367,12 @@ test07CanNotAddToCartAfter30MinutesWithoutOperationsOnCart
 		createCartForId: testObjectsFactory validUserOfTheStore
 		password: testObjectsFactory validUserPasswordOfTheStore.
 	reloj _ Time now.
-	market 
-		setTimestamp: (Time hour: reloj hour - 1 minute: 0 second: 0)
+	market
+		setTimestamp:
+			(Time
+				hour: reloj hour - 1
+				minute: 0
+				second: 0)
 		forCart: carritoId.
 	self
 		should: [
@@ -380,9 +384,9 @@ test07CanNotAddToCartAfter30MinutesWithoutOperationsOnCart
 		withExceptionDo: [ :error |
 			self
 				assert: error messageText
-				equals: Market cartTimeOutErrorMessage ].! !
+				equals: Store cartTimeOutErrorMessage ].! !
 
-!RestInterfaceTest methodsFor: 'testing' stamp: 'GAA 6/18/2018 12:40:45'!
+!RestInterfaceTest methodsFor: 'testing' stamp: 'GAA 6/18/2018 14:49:22'!
 test08
 	| rest carritoId |
 	rest _ RestInterface newFor: market.
@@ -395,7 +399,7 @@ test08
 		withExceptionDo: [ :error |
 			self
 				assert: error messageText
-				equals: Market invalidCartIdErrorMessage.
+				equals: Store invalidCartIdErrorMessage.
 			self deny: carritoId = 999 ].! !
 
 !RestInterfaceTest methodsFor: 'testing' stamp: 'GAA 6/18/2018 12:40:45'!
@@ -417,6 +421,26 @@ test09
 	self
 		assert: (listaItemsEnCarrito at: 2)
 		equals: 1.! !
+
+!RestInterfaceTest methodsFor: 'testing' stamp: 'GAA 6/18/2018 15:32:23'!
+test10
+	| rest carritoId today listaItemsEnCarrito |
+	rest _ RestInterface newFor: market.
+	today _ DateAndTime now.
+	carritoId _ rest
+		createCartForId: testObjectsFactory validUserOfTheStore
+		password: testObjectsFactory validUserPasswordOfTheStore.
+	rest
+		addToCart: carritoId
+		book: testObjectsFactory itemSellByTheStore
+		withQuantity: 1.
+	listaItemsEnCarrito _ rest listCart: carritoId.
+	rest 
+		checkOutCart: carritoId 
+		creditCardNumber: 10001
+		creditCardExpirationDate: (Month month: today monthIndex year: today yearNumber + 1)
+		creditCardOwner: testObjectsFactory validUserOfTheStore.
+	self assert: (rest listPurchases: testObjectsFactory validUserOfTheStore) equals: listaItemsEnCarrito.! !
 
 
 !classDefinition: #Authentication category: #TusLibros!
@@ -674,86 +698,6 @@ expiringOn: aMonth
 	^self new initializeExpiringOn: aMonth! !
 
 
-!classDefinition: #Market category: #TusLibros!
-Object subclass: #Market
-	instanceVariableNames: 'authentication catalog carts'
-	classVariableNames: ''
-	poolDictionaries: ''
-	category: 'TusLibros'!
-
-!Market methodsFor: 'initialization' stamp: 'GAA 6/15/2018 13:51:42'!
-initializeWithCatalog: aCatalog authentication: anAuthentication
-	catalog _ aCatalog.
-	authentication _ anAuthentication.
-	carts _ Dictionary new.! !
-
-
-!Market methodsFor: 'accessing' stamp: 'GAA 6/18/2018 14:06:05'!
-addToCart: aCartId book: aBookISBN withQuantity: aQuantity
-	| carritoEntry |
-	carritoEntry _ self assertCartValidity: aCartId.
-	(carritoEntry at: #cart)
-		add: aQuantity
-		of: aBookISBN.! !
-
-!Market methodsFor: 'accessing' stamp: 'GAA 6/18/2018 13:34:33'!
-createCartForUser: anUser password: aPassword
-	| entry |
-	authentication auth:anUser withPassword: aPassword.
-	entry _ Dictionary new.
-	entry add: #cart -> (Cart acceptingItemsOf: catalog).
-	entry add: #timestamp -> Time now.
-	carts at: 1 put: entry.
-	^1.! !
-
-!Market methodsFor: 'accessing' stamp: 'GAA 6/18/2018 14:06:05'!
-itemListFromCart: aCartId
-	| carritoEntry |
-	carritoEntry _ self assertCartValidity: aCartId.
-	^ (carritoEntry at: #cart) itemList.! !
-
-
-!Market methodsFor: 'private' stamp: 'GAA 6/18/2018 14:00:32'!
-cartTimeOut
-	^Duration minutes: 30.! !
-
-!Market methodsFor: 'private' stamp: 'GAA 6/18/2018 13:36:13'!
-setTimestamp: aTime forCart: aCartId 
-	(carts at: aCartId ) at:#timestamp put: aTime.! !
-
-
-!Market methodsFor: 'assertions' stamp: 'GAA 6/18/2018 14:06:05'!
-assertCartValidity: aCartId
-	| cartEntry tiempoDesdeUltimaOperacion |
-	cartEntry _ carts
-		at: aCartId
-		ifAbsent: [ self error: self class invalidCartIdErrorMessage ].
-	tiempoDesdeUltimaOperacion _ Time now - (cartEntry at: #timestamp).
-	tiempoDesdeUltimaOperacion < self cartTimeOut ifFalse: [
-		carts removeKey: aCartId.
-		self error: self class cartTimeOutErrorMessage ].
-	^ cartEntry.! !
-
-"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
-
-!classDefinition: 'Market class' category: #TusLibros!
-Market class
-	instanceVariableNames: ''!
-
-!Market class methodsFor: 'instance creation' stamp: 'GAA 6/14/2018 21:23:12'!
-newWithCatalog: aCatalog authentication: anAuthentication 
-	^self new initializeWithCatalog: aCatalog authentication: anAuthentication.! !
-
-
-!Market class methodsFor: 'error handling' stamp: 'GAA 6/18/2018 13:38:47'!
-cartTimeOutErrorMessage
-	^'El carrito al que se quiere accceder ya no existe.'! !
-
-!Market class methodsFor: 'error handling' stamp: 'GAA 6/15/2018 12:06:21'!
-invalidCartIdErrorMessage
-	^'El número de carrito es inválido'.! !
-
-
 !classDefinition: #RestInterface category: #TusLibros!
 Object subclass: #RestInterface
 	instanceVariableNames: 'users store'
@@ -765,6 +709,10 @@ Object subclass: #RestInterface
 !RestInterface methodsFor: 'accessing' stamp: 'GAA 6/15/2018 12:04:34'!
 addToCart: aCartId book: aBookISBN withQuantity: aQuantity 
 	store addToCart: aCartId book: aBookISBN withQuantity: aQuantity.! !
+
+!RestInterface methodsFor: 'accessing' stamp: 'GAA 6/18/2018 14:34:33'!
+checkOutCart: aCartId creditCardNumber: aCreditCardId creditCardExpirationDate: aMonth creditCardOwner: aUser
+	^store checkOutCart: aCartId creditCardNumber: aCreditCardId creditCardExpirationDate: aMonth creditCardOwner: aUser.! !
 
 !RestInterface methodsFor: 'accessing' stamp: 'GAA 6/14/2018 21:33:15'!
 createCartForId: aUser password: aPassword
@@ -782,6 +730,18 @@ listCart: aCartId
 					; addLast: (itemList at: key)
 					; yourself .]
 	! !
+
+!RestInterface methodsFor: 'accessing' stamp: 'GAA 6/18/2018 15:35:31'!
+listPurchases: anUser
+	| itemList |
+	itemList _ store listPurchases: anUser.
+	^itemList keys
+		inject: OrderedCollection new 
+		into: [:resList :key | 
+				resList 
+					addLast: key 
+					; addLast: (itemList at: key)
+					; yourself .]! !
 
 
 !RestInterface methodsFor: 'initialize' stamp: 'GAA 6/14/2018 21:27:22'!
@@ -833,6 +793,123 @@ of: aTotal
 
 	"should assert total is not negative or 0!!"
 	^self new initializeTotal: aTotal ! !
+
+
+!classDefinition: #Store category: #TusLibros!
+Object subclass: #Store
+	instanceVariableNames: 'authentication catalog carts userPurchases'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'TusLibros'!
+
+!Store methodsFor: 'initialization' stamp: 'GAA 6/18/2018 15:04:05'!
+initializeWithCatalog: aCatalog authentication: anAuthentication
+	catalog _ aCatalog.
+	authentication _ anAuthentication.
+	carts _ Dictionary new.
+	userPurchases _ Dictionary new.! !
+
+
+!Store methodsFor: 'accessing' stamp: 'GAA 6/18/2018 14:38:49'!
+addToCart: aCartId book: aBookISBN withQuantity: aQuantity
+	| carrito |
+	carrito _ self assertCartValidity: aCartId.
+	carrito add: aQuantity of: aBookISBN.! !
+
+!Store methodsFor: 'accessing' stamp: 'GAA 6/18/2018 15:14:31'!
+checkOutCart: aCartId creditCardNumber: aCreditCardId creditCardExpirationDate: aMonth creditCardOwner: aUser
+	| carrito cashier creditCard |
+	carrito _ self assertCartValidity: aCartId.
+	creditCard _ CreditCard expiringOn: aMonth .
+	cashier _ Cashier
+		toCheckout: carrito 
+		charging: creditCard
+		throught: CashierTest new setUp
+		on: DateAndTime now
+		registeringOn: OrderedCollection new.
+	cashier checkOut.
+	self updateUserPurchases: aCartId.! !
+
+!Store methodsFor: 'accessing' stamp: 'GAA 6/18/2018 15:11:10'!
+createCartForUser: anUser password: aPassword
+	| entry |
+	authentication auth:anUser withPassword: aPassword.
+	entry _ Dictionary new.
+	entry add: #cart -> (Cart acceptingItemsOf: catalog).
+	entry add: #timestamp -> Time now.
+	entry add: #user -> anUser.
+	carts at: 1 put: entry.
+	^1.! !
+
+!Store methodsFor: 'accessing' stamp: 'GAA 6/18/2018 14:38:24'!
+itemListFromCart: aCartId
+	| carrito |
+	carrito _ self assertCartValidity: aCartId.
+	^ carrito itemList.! !
+
+!Store methodsFor: 'accessing' stamp: 'GAA 6/18/2018 15:37:54'!
+listPurchases: anUser
+	^(userPurchases at: anUser) copy.! !
+
+
+!Store methodsFor: 'private' stamp: 'GAA 6/18/2018 14:00:32'!
+cartTimeOut
+	^Duration minutes: 30.! !
+
+!Store methodsFor: 'private' stamp: 'GAA 6/18/2018 13:36:13'!
+setTimestamp: aTime forCart: aCartId 
+	(carts at: aCartId ) at:#timestamp put: aTime.! !
+
+!Store methodsFor: 'private' stamp: 'GAA 6/18/2018 15:37:18'!
+updateUserPurchases: aCartId
+	| carrito compras itemsEnCarrito usuario |
+	carrito _ self assertCartValidity: aCartId.
+	usuario _ (carts at: aCartId ) at: #user.
+	compras _ userPurchases at: usuario ifAbsent: [Dictionary new].
+	itemsEnCarrito _ carrito itemList.
+	itemsEnCarrito keys
+		inject: compras 
+		into: [:purchases :elem | 
+			| cantidadItem |
+			cantidadItem _  itemsEnCarrito at: elem.
+			purchases at: elem 
+				ifPresent: [:number | purchases at: elem put: number + cantidadItem .	] 
+				ifAbsent: [purchases at: elem put: cantidadItem.] 
+			].
+	userPurchases at: usuario put: compras.! !
+
+
+!Store methodsFor: 'assertions' stamp: 'GAA 6/18/2018 14:56:11'!
+assertCartValidity: aCartId
+	| cartEntry tiempoDesdeUltimaOperacion |
+	cartEntry _ carts
+		at: aCartId
+		ifAbsent: [ self error: self class invalidCartIdErrorMessage ].
+	tiempoDesdeUltimaOperacion _ Time now - (cartEntry at: #timestamp).
+	tiempoDesdeUltimaOperacion < self cartTimeOut ifFalse: [
+		carts removeKey: aCartId.
+		self error: self class cartTimeOutErrorMessage ].
+	cartEntry at: #timestamp put: Time now.
+	^ cartEntry at: #cart.! !
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'Store class' category: #TusLibros!
+Store class
+	instanceVariableNames: ''!
+
+!Store class methodsFor: 'instance creation' stamp: 'GAA 6/14/2018 21:23:12'!
+newWithCatalog: aCatalog authentication: anAuthentication 
+	^self new initializeWithCatalog: aCatalog authentication: anAuthentication.! !
+
+
+!Store class methodsFor: 'error handling' stamp: 'GAA 6/18/2018 13:38:47'!
+cartTimeOutErrorMessage
+	^'El carrito al que se quiere accceder ya no existe.'! !
+
+!Store class methodsFor: 'error handling' stamp: 'GAA 6/15/2018 12:06:21'!
+invalidCartIdErrorMessage
+	^'El número de carrito es inválido'.! !
 
 
 !classDefinition: #StoreTestObjectsFactory category: #TusLibros!
